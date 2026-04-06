@@ -4,14 +4,14 @@ import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.modulith.docs.Documenter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.assertj.core.api.Assertions;
+
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
-
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
-import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.tngtech.archunit.library.Architectures;
+import com.tngtech.archunit.core.domain.JavaClass.Predicates;
 
 public class ModulithTest {
     ApplicationModules modules = ApplicationModules.of(PathFinderSpringBackendApplication.class);
@@ -20,7 +20,7 @@ public class ModulithTest {
     @DisplayName("모듈 개수 검증:  Field, Progress, Valuation, Insights 확인")
     void verifyModuleCount() {
     long count = modules.stream().count();
-    assertEquals(5, count, "인식된 모듈의 개수가 기대와 다릅니다.");
+    Assertions.assertThat(count).as("인식된 모듈의 개수가 기대와 다릅니다.").isEqualTo(5);
     }
 
     @Test
@@ -34,10 +34,10 @@ public class ModulithTest {
     void strictArchitectureGuard() {
     JavaClasses classes = new ClassFileImporter()
             .importPackages("com.coralstay.pathfinderspringbackend");
-    DescribedPredicate<JavaClass> isInternal = resideInAPackage("com.coralstay.pathfinderspringbackend..");
+    DescribedPredicate<JavaClass> isInternal = Predicates.resideInAPackage("com.coralstay.pathfinderspringbackend..");
     DescribedPredicate<JavaClass> isExternal = DescribedPredicate.not(isInternal);
 
-    layeredArchitecture()
+    Architectures.layeredArchitecture()
             .consideringAllDependencies()
             .layer("Baseline").definedBy("com.coralstay.pathfinderspringbackend.baseline..")
             .layer("Field").definedBy("com.coralstay.pathfinderspringbackend.field..")
