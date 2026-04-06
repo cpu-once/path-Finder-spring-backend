@@ -34,8 +34,9 @@ public class ModulithTest {
     void strictArchitectureGuard() {
     JavaClasses classes = new ClassFileImporter()
             .importPackages("com.coralstay.pathfinderspringbackend");
-    DescribedPredicate<JavaClass> isInternal = Predicates.resideInAPackage("com.coralstay.pathfinderspringbackend..");
-    DescribedPredicate<JavaClass> isExternal = DescribedPredicate.not(isInternal);
+
+            DescribedPredicate<JavaClass> isInternal = Predicates.resideInAPackage("com.coralstay.pathfinderspringbackend..");
+            DescribedPredicate<JavaClass> isExternal = DescribedPredicate.not(isInternal);
 
     Architectures.layeredArchitecture()
             .consideringAllDependencies()
