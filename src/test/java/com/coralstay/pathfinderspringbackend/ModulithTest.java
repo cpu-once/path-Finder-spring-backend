@@ -1,10 +1,16 @@
 package com.coralstay.pathfinderspringbackend;
 
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClass.Predicates;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.library.Architectures;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,6 +21,7 @@ import org.springframework.modulith.docs.Documenter;
 
 // To - Do
 // hardcoding 된거 다 바꾸기
+// reflection 으로 쓰는게 나은것인가, archunit에 의존하는게 나은것인가?
 
 public class ModulithTest {
 
@@ -24,6 +31,31 @@ public class ModulithTest {
   @BeforeAll
   static void setup() {
     modules = ApplicationModules.of(PathFinderSpringBackendApplication.class);
+  }
+
+
+  @Test
+  @DisplayName("ArchUnit을 이용한 패키지 구조 및 명명 규약 검증")
+  void verifyArchitectureWithArchUnit() {
+    JavaClasses importedClasses = new ClassFileImporter()
+        .importPackages("com.coralstay.pathfinderspringbackend");
+
+    // 1. 모든 클래스는 소문자로 된 패키지 안에 있어야 함 (Naming Convention)
+    ArchRule packageNamingRule = classes()
+        .should().resideInAPackage("..")
+        .andShould(new ArchCondition<JavaClass>("패키지명은 소문자여야 함") {
+          @Override
+          public void check(JavaClass item, ConditionEvents events) {
+            String packageName = item.getPackageName();
+            if (!packageName.equals(packageName.toLowerCase())) {
+              events.add(SimpleConditionEvent.violated(item,
+                  "패키지명이 대문자를 포함합니다: " + packageName));
+            }
+          }
+        });
+
+    // 2. 모듈 간 단방향 의존성 (우리가 짠 layeredArchitecture와 결합)
+    packageNamingRule.check(importedClasses);
   }
 
   @Test
