@@ -1,3 +1,18 @@
 spring:
   application:
     name: pathFinder-spring-backend
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:~/testdb;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update # 엔티티 변경 시 테이블 스키마 자동 변경 (create, create-drop 등 활용 가능)
+    properties:
+      hibernate:
+        format_sql: true # 출력되는 SQL을 보기 좋게 정렬
+        use_sql_comments: true # SQL에 주석 추가하여 가독성 향상
