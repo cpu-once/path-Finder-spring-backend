@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.modulith.docs.Documenter;
 
-// TODO: Refactor all hardcoded string values to be programmable/dynamic constants.
+// TODO: Refactor all hardcoded string values to be programmable/dynamic constants. Using ArchUnit constants and properties. Runtime classpath scanning.
 // TODO: Extract and apply useful advanced rules from the official ArchUnit documentation.
 // TODO: Restrict dependencies between Controller -> Service -> Repository -> Domain layers within each package.
 // TODO: Enforce strict naming convention constraints across all components.
