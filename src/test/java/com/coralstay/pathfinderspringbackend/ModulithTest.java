@@ -46,6 +46,8 @@ import org.springframework.modulith.docs.Documenter;
 // TODO: Implement test case categorization for different environments (e.g., unit, integration, end-to-end).
 // TODO: Make Test hierarchy more readable and maintainable.
 // TODO: These test are slow. make it faster and more efficient.
+// TODO: Refactor test classes to follow DRY (Don't Repeat Yourself) principle.
+// TODO: Split file into multiple test classes for better organization and maintainability.
 
 public class ModulithTest {
 
