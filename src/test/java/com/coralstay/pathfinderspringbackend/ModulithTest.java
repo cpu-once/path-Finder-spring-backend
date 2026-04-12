@@ -19,8 +19,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.modulith.docs.Documenter;
 
-// To - Do
-// hardcoding된 부분 모두 프로그래머블하게 수정
+// TODO: Refactor all hardcoded string values to be programmable/dynamic constants.
+// TODO: Extract and apply useful advanced rules from the official ArchUnit documentation.
+// TODO: Restrict dependencies between Controller -> Service -> Repository -> Domain layers within each package.
+// TODO: Enforce strict naming convention constraints across all components.
+
+// TODO: Verify BOM version consistency using the Spring Boot Starter BOM.
+// TODO: Define layer-specific structural constraints.
+//       (Applies to: DTO, Value Object, Domain Object, Service, Repository, Controller)
+
+// TODO: Restrict the usage of specific external library functions.
+// TODO: Add naming and return-type constraints for Spring Data JPA Repository methods.
+
+// TODO: Enforce general Java coding style constraints.
+// TODO: Enforce testability constraints (e.g., prohibit hardcoded instantiation of time/randomness).
 
 public class ModulithTest {
 
