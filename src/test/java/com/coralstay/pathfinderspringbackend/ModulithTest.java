@@ -20,8 +20,7 @@ import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.modulith.docs.Documenter;
 
 // To - Do
-// hardcoding 된거 다 바꾸기
-// reflection 으로 쓰는게 나은것인가, archunit에 의존하는게 나은것인가?
+// hardcoding된 부분 모두 프로그래머블하게 수정
 
 public class ModulithTest {
 
