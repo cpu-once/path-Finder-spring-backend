@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.modulith.docs.Documenter;
 
+// TODO: Ordering these TODO
 // TODO: Refactor all hardcoded string values to be programmable/dynamic constants. Using ArchUnit constants and properties. Runtime classpath scanning.
 // TODO: Extract and apply useful advanced rules from the official ArchUnit documentation.
 // TODO: Restrict dependencies between Controller -> Service -> Repository -> Domain layers within each package.
@@ -33,6 +34,18 @@ import org.springframework.modulith.docs.Documenter;
 
 // TODO: Enforce general Java coding style constraints.
 // TODO: Enforce testability constraints (e.g., prohibit hardcoded instantiation of time/randomness).
+// TODO: Enforce naming conventions for test classes and methods.
+// TODO: Implement test coverage checks for critical components.
+// TODO: Automate test execution and reporting using CI/CD pipelines.
+// TODO: Integrate with code review tools for automated feedback.
+// TODO: Implement automated test result analysis and alerting.
+// TODO: Ensure test isolation and clean-up after each test.
+// TODO: Implement test data setup and teardown using @BeforeEach and @AfterEach.
+// TODO: Use parameterized tests for repetitive test scenarios.
+// TODO: Implement test case prioritization based on business impact.
+// TODO: Implement test case categorization for different environments (e.g., unit, integration, end-to-end).
+// TODO: Make Test hierarchy more readable and maintainable.
+// TODO: These test are slow. make it faster and more efficient.
 
 public class ModulithTest {
 
