@@ -19,6 +19,81 @@ import org.junit.jupiter.api.Test;
 import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.modulith.docs.Documenter;
 
+/**
+ * Day 1: Fortification & Core Boundaries Focus: Securing the application perimeter and enforcing
+ * strict architectural layers.
+ * <p>
+ * // TODO: Apply Mythos to find security vulnerabilities.
+ * <p>
+ * // TODO: Verify BOM version consistency using the Spring Boot Starter BOM.
+ * <p>
+ * // TODO: Restrict dependencies between Controller -> Service -> Repository -> Domain layers
+ * within each package.
+ * <p>
+ * // TODO: Define layer-specific structural constraints. (Applies to: DTO, Value Object, Domain
+ * Object, Service, Repository, Controller)
+ * <p>
+ * Day 2: Test Infrastructure Overhaul Focus: Dismantling the monolithic ModulithTest class and
+ * establishing isolated, fast, and maintainable test foundations.
+ * <p>
+ * // TODO: Split file into multiple test classes for better organization and maintainability.
+ * <p>
+ * // TODO: Ensure test isolation and clean-up after each test.
+ * <p>
+ * // TODO: Implement test data setup and teardown using @BeforeEach and @AfterEach.
+ * <p>
+ * // TODO: These test are slow. make it faster and more efficient.
+ * <p>
+ * // TODO: Make Test hierarchy more readable and maintainable.
+ * <p>
+ * // TODO: Refactor test classes to follow DRY (Don't Repeat Yourself) principle.
+ * <p>
+ * Day 3: Advanced Programmatic Constraints Focus: Upgrading the rule definitions from hardcoded
+ * strings to dynamic properties and blocking dangerous coding patterns.
+ * <p>
+ * // TODO: Refactor all hardcoded string values to be programmable/dynamic constants. Using
+ * ArchUnit constants and properties. Runtime classpath scanning.
+ * <p>
+ * // TODO: Restrict the usage of specific external library functions.
+ * <p>
+ * // TODO: Enforce testability constraints (e.g., prohibit hardcoded instantiation of
+ * time/randomness).
+ * <p>
+ * // TODO: Extract and apply useful advanced rules from the official ArchUnit documentation.
+ * <p>
+ * Day 4: Conventions, Aesthetics, & Test Categorization Focus: Standardizing the project's
+ * vocabulary, coding style, and organizing how tests are executed locally.
+ * <p>
+ * // TODO: Enforce strict naming convention constraints across all components.
+ * <p>
+ * // TODO: Enforce naming conventions for test classes and methods.
+ * <p>
+ * // TODO: Add naming and return-type constraints for Spring Data JPA Repository methods.
+ * <p>
+ * // TODO: Enforce general Java coding style constraints.
+ * <p>
+ * // TODO: Use parameterized tests for repetitive test scenarios.
+ * <p>
+ * // TODO: Implement test case categorization for different environments (e.g., unit, integration,
+ * end-to-end).
+ * <p>
+ * // TODO: Implement test case prioritization based on business impact.
+ * <p>
+ * Day 5: CI/CD Orchestration & Telemetry Focus: Automating the enforcement of all previously built
+ * rules in the cloud.
+ * <p>
+ * // TODO: Automate test execution and reporting using CI/CD pipelines.
+ * <p>
+ * // TODO: Implement test coverage checks for critical components.
+ * <p>
+ * // TODO: Integrate with code review tools for automated feedback.
+ * <p>
+ * // TODO: Implement automated test result analysis and alerting.
+ */
+
+/**
+ * BACK LOG
+ */
 // TODO: Apply Mythos to find security vulnerabilities.
 // TODO: Refactor all hardcoded string values to be programmable/dynamic constants. Using ArchUnit constants and properties. Runtime classpath scanning.
 // TODO: Extract and apply useful advanced rules from the official ArchUnit documentation.
