@@ -37,5 +37,3 @@
 라이브러리 호환성: 일부 오래된 외부 라이브러리가 Java 25의 바이트코드를 인식하지 못할 수 있어 사전 검증이 필요합니다. (특히 ByteBuddy, ASM 관련 라이브러리)
 학습 곡선: Scoped Values나 Structured Concurrency 같은 새로운 동시성 패러다임에 대한 팀원들의 적응 기간이 필요합니다.
 JVM 옵션 튜닝: 압축 객체 헤더 등 일부 기능은 명시적인 JVM 옵션 활성화가 필요하며, 이에 대한 벤치마킹 비용이 발생합니다.
-
-## Fact-checking (gemini-deep-research)
