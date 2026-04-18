@@ -1,9 +1,5 @@
-#### ifc 4.3 specification
+### 1. 공식 스펙 문서 (The Source of Truth)
 
-- https://standards.buildingsmart.org/IFC/RELEASE/IFC4_3/HTML/
+모든 엔티티의 부모-자식 관계와 속성이 정의된 '바이블' 입니다.
 
-#### ifc guide
-
-#### OSArch-Wiki
-
-- https://osarch.org/
+- [IFC4](https://standards.buildingsmart.org/IFC/RELEASE/IFC4/ADD2/HTML/index.htm)
