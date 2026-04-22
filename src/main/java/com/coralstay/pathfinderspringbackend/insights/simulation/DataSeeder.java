@@ -1,5 +1,5 @@
 package com.coralstay.pathfinderspringbackend.insights.simulation;
 
-public class InsightDataSeeder {
-
+public interface DataSeeder {
+    void seed();
 }

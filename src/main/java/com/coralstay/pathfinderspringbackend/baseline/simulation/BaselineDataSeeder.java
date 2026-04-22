@@ -1,5 +1,12 @@
 package com.coralstay.pathfinderspringbackend.baseline.simulation;
 
-public class BaselineDataSeeder {
+import org.springframework.stereotype.Component;
 
+@Component
+public class BaselineDataSeeder implements DataSeeder {
+
+  @Override
+  public void seed() {
+    System.out.println("Seeding baseline data...");
+  }
 }
