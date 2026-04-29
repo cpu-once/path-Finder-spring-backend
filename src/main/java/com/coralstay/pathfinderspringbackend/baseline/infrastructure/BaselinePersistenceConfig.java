@@ -1,9 +1,7 @@
 package com.coralstay.pathfinderspringbackend.baseline.infrastructure;
 
-import com.coralstay.pathfinderspringbackend.common.PersistenceConstants;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +16,15 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = PersistenceConstants.BASELINE_PACKAGE,
-        entityManagerFactoryRef = PersistenceConstants.BASELINE_ENTITY_MANAGER_FACTORY,
-        transactionManagerRef = PersistenceConstants.BASELINE_TRANSACTION_MANAGER
+        basePackages = BaselinePersistenceConstants.PACKAGE,
+        entityManagerFactoryRef = BaselinePersistenceConstants.ENTITY_MANAGER_FACTORY,
+        transactionManagerRef = BaselinePersistenceConstants.TRANSACTION_MANAGER
 )
 public class BaselinePersistenceConfig {
 
     @Primary
     @Bean
-    @ConfigurationProperties(PersistenceConstants.BASELINE_DATASOURCE_PROPERTIES)
+    @ConfigurationProperties(BaselinePersistenceConstants.DATASOURCE_PROPERTIES)
     public DataSourceProperties baselineDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -40,18 +38,18 @@ public class BaselinePersistenceConfig {
     }
 
     @Primary
-    @Bean(name = PersistenceConstants.BASELINE_ENTITY_MANAGER_FACTORY)
+    @Bean(name = BaselinePersistenceConstants.ENTITY_MANAGER_FACTORY)
     public LocalContainerEntityManagerFactoryBean baselineEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(baselineDataSource());
-        factory.setPackagesToScan(PersistenceConstants.BASELINE_PACKAGE);
+        factory.setPackagesToScan(BaselinePersistenceConstants.PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName(PersistenceConstants.BASELINE_PERSISTENCE_UNIT);
+        factory.setPersistenceUnitName(BaselinePersistenceConstants.PERSISTENCE_UNIT);
         return factory;
     }
 
     @Primary
-    @Bean(name = PersistenceConstants.BASELINE_TRANSACTION_MANAGER)
+    @Bean(name = BaselinePersistenceConstants.TRANSACTION_MANAGER)
     public PlatformTransactionManager baselineTransactionManager(
             EntityManagerFactory baselineEntityManagerFactory) {
         return new JpaTransactionManager(baselineEntityManagerFactory);

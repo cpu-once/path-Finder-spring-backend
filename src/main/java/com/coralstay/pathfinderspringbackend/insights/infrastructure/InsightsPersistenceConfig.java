@@ -1,9 +1,7 @@
 package com.coralstay.pathfinderspringbackend.insights.infrastructure;
 
-import com.coralstay.pathfinderspringbackend.common.PersistenceConstants;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +15,14 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = PersistenceConstants.INSIGHTS_PACKAGE,
-        entityManagerFactoryRef = PersistenceConstants.INSIGHTS_ENTITY_MANAGER_FACTORY,
-        transactionManagerRef = PersistenceConstants.INSIGHTS_TRANSACTION_MANAGER
+        basePackages = InsightsPersistenceConstants.PACKAGE,
+        entityManagerFactoryRef = InsightsPersistenceConstants.ENTITY_MANAGER_FACTORY,
+        transactionManagerRef = InsightsPersistenceConstants.TRANSACTION_MANAGER
 )
 public class InsightsPersistenceConfig {
 
     @Bean
-    @ConfigurationProperties(PersistenceConstants.INSIGHTS_DATASOURCE_PROPERTIES)
+    @ConfigurationProperties(InsightsPersistenceConstants.DATASOURCE_PROPERTIES)
     public DataSourceProperties insightsDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -36,17 +34,17 @@ public class InsightsPersistenceConfig {
                 .build();
     }
 
-    @Bean(name = PersistenceConstants.INSIGHTS_ENTITY_MANAGER_FACTORY)
+    @Bean(name = InsightsPersistenceConstants.ENTITY_MANAGER_FACTORY)
     public LocalContainerEntityManagerFactoryBean insightsEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(insightsDataSource());
-        factory.setPackagesToScan(PersistenceConstants.INSIGHTS_PACKAGE);
+        factory.setPackagesToScan(InsightsPersistenceConstants.PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName(PersistenceConstants.INSIGHTS_PERSISTENCE_UNIT);
+        factory.setPersistenceUnitName(InsightsPersistenceConstants.PERSISTENCE_UNIT);
         return factory;
     }
 
-    @Bean(name = PersistenceConstants.INSIGHTS_TRANSACTION_MANAGER)
+    @Bean(name = InsightsPersistenceConstants.TRANSACTION_MANAGER)
     public PlatformTransactionManager insightsTransactionManager(
             EntityManagerFactory insightsEntityManagerFactory) {
         return new JpaTransactionManager(insightsEntityManagerFactory);

@@ -1,6 +1,10 @@
 package com.coralstay.pathfinderspringbackend.architecture;
 
-import com.coralstay.pathfinderspringbackend.common.PersistenceConstants;
+import com.coralstay.pathfinderspringbackend.baseline.infrastructure.BaselinePersistenceConstants;
+import com.coralstay.pathfinderspringbackend.field.infrastructure.FieldPersistenceConstants;
+import com.coralstay.pathfinderspringbackend.insights.infrastructure.InsightsPersistenceConstants;
+import com.coralstay.pathfinderspringbackend.progress.infrastructure.ProgressPersistenceConstants;
+import com.coralstay.pathfinderspringbackend.valuation.infrastructure.ValuationPersistenceConstants;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClass.Predicates;
@@ -30,11 +34,11 @@ public class ModuleDependencyTest {
 
         Architectures.layeredArchitecture()
                 .consideringAllDependencies()
-                .layer("Baseline").definedBy(PersistenceConstants.BASELINE_PACKAGE + "..")
-                .layer("Field").definedBy(PersistenceConstants.FIELD_PACKAGE + "..")
-                .layer("Progress").definedBy(PersistenceConstants.PROGRESS_PACKAGE + "..")
-                .layer("Valuation").definedBy(PersistenceConstants.VALUATION_PACKAGE + "..")
-                .layer("Insights").definedBy(PersistenceConstants.INSIGHTS_PACKAGE + "..")
+                .layer("Baseline").definedBy(BaselinePersistenceConstants.PACKAGE + "..")
+                .layer("Field").definedBy(FieldPersistenceConstants.PACKAGE + "..")
+                .layer("Progress").definedBy(ProgressPersistenceConstants.PACKAGE + "..")
+                .layer("Valuation").definedBy(ValuationPersistenceConstants.PACKAGE + "..")
+                .layer("Insights").definedBy(InsightsPersistenceConstants.PACKAGE + "..")
 
                 .whereLayer("Baseline").mayNotAccessAnyLayer()
                 .whereLayer("Field").mayOnlyAccessLayers("Baseline")

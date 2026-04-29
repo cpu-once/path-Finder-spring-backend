@@ -1,9 +1,7 @@
 package com.coralstay.pathfinderspringbackend.valuation.infrastructure;
 
-import com.coralstay.pathfinderspringbackend.common.PersistenceConstants;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +15,14 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = PersistenceConstants.VALUATION_PACKAGE,
-        entityManagerFactoryRef = PersistenceConstants.VALUATION_ENTITY_MANAGER_FACTORY,
-        transactionManagerRef = PersistenceConstants.VALUATION_TRANSACTION_MANAGER
+        basePackages = ValuationPersistenceConstants.PACKAGE,
+        entityManagerFactoryRef = ValuationPersistenceConstants.ENTITY_MANAGER_FACTORY,
+        transactionManagerRef = ValuationPersistenceConstants.TRANSACTION_MANAGER
 )
 public class ValuationPersistenceConfig {
 
     @Bean
-    @ConfigurationProperties(PersistenceConstants.VALUATION_DATASOURCE_PROPERTIES)
+    @ConfigurationProperties(ValuationPersistenceConstants.DATASOURCE_PROPERTIES)
     public DataSourceProperties valuationDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -36,17 +34,17 @@ public class ValuationPersistenceConfig {
                 .build();
     }
 
-    @Bean(name = PersistenceConstants.VALUATION_ENTITY_MANAGER_FACTORY)
+    @Bean(name = ValuationPersistenceConstants.ENTITY_MANAGER_FACTORY)
     public LocalContainerEntityManagerFactoryBean valuationEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(valuationDataSource());
-        factory.setPackagesToScan(PersistenceConstants.VALUATION_PACKAGE);
+        factory.setPackagesToScan(ValuationPersistenceConstants.PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName(PersistenceConstants.VALUATION_PERSISTENCE_UNIT);
+        factory.setPersistenceUnitName(ValuationPersistenceConstants.PERSISTENCE_UNIT);
         return factory;
     }
 
-    @Bean(name = PersistenceConstants.VALUATION_TRANSACTION_MANAGER)
+    @Bean(name = ValuationPersistenceConstants.TRANSACTION_MANAGER)
     public PlatformTransactionManager valuationTransactionManager(
             EntityManagerFactory valuationEntityManagerFactory) {
         return new JpaTransactionManager(valuationEntityManagerFactory);
