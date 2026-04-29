@@ -1,11 +1,10 @@
 package com.coralstay.pathfinderspringbackend.progress.infrastructure;
 
-import javax.sql.DataSource;
-
+import com.coralstay.pathfinderspringbackend.common.PersistenceConstants;
 import jakarta.persistence.EntityManagerFactory;
-
-import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -14,20 +13,18 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableJpaRepositories(
-        basePackages = ProgressPersistenceConfig.BASE_PACKAGE,
-        entityManagerFactoryRef = "progressEntityManagerFactory",
-        transactionManagerRef = "progressTransactionManager"
+        basePackages = PersistenceConstants.PROGRESS_PACKAGE,
+        entityManagerFactoryRef = PersistenceConstants.PROGRESS_ENTITY_MANAGER_FACTORY,
+        transactionManagerRef = PersistenceConstants.PROGRESS_TRANSACTION_MANAGER
 )
 public class ProgressPersistenceConfig {
 
-    public static final String BASE_PACKAGE = "com.coralstay.pathfinderspringbackend.progress";
-    public static final String DATASOURCE_PREFIX = "app.datasource.progress";
-    public static final String UNIT_NAME = "progress";
-
     @Bean
-    @ConfigurationProperties(DATASOURCE_PREFIX)
+    @ConfigurationProperties(PersistenceConstants.PROGRESS_DATASOURCE_PROPERTIES)
     public DataSourceProperties progressDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -39,17 +36,17 @@ public class ProgressPersistenceConfig {
                 .build();
     }
 
-    @Bean
+    @Bean(name = PersistenceConstants.PROGRESS_ENTITY_MANAGER_FACTORY)
     public LocalContainerEntityManagerFactoryBean progressEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(progressDataSource());
-        factory.setPackagesToScan(BASE_PACKAGE);
+        factory.setPackagesToScan(PersistenceConstants.PROGRESS_PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName(UNIT_NAME);
+        factory.setPersistenceUnitName(PersistenceConstants.PROGRESS_PERSISTENCE_UNIT);
         return factory;
     }
 
-    @Bean
+    @Bean(name = PersistenceConstants.PROGRESS_TRANSACTION_MANAGER)
     public PlatformTransactionManager progressTransactionManager(
             EntityManagerFactory progressEntityManagerFactory) {
         return new JpaTransactionManager(progressEntityManagerFactory);

@@ -1,5 +1,6 @@
 package com.coralstay.pathfinderspringbackend.architecture;
 
+import com.coralstay.pathfinderspringbackend.common.PersistenceConstants;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClass.Predicates;
@@ -10,31 +11,30 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-// TODO: Refactor hardcoded string values to dynamic constants (ArchUnit constants, runtime classpath scanning)
 public class ModuleDependencyTest {
+
+    private static final String ROOT = "com.coralstay.pathfinderspringbackend";
 
     private static JavaClasses classes;
 
     @BeforeAll
     static void setup() {
-        classes = new ClassFileImporter()
-                .importPackages("com.coralstay.pathfinderspringbackend");
+        classes = new ClassFileImporter().importPackages(ROOT);
     }
 
     @Test
     @DisplayName("단방향 파이프라인 의존성을 위반하면 안 된다")
     void unidirectionalPipeline() {
-        DescribedPredicate<JavaClass> isInternal = Predicates.resideInAPackage(
-                "com.coralstay.pathfinderspringbackend..");
+        DescribedPredicate<JavaClass> isInternal = Predicates.resideInAPackage(ROOT + "..");
         DescribedPredicate<JavaClass> isExternal = DescribedPredicate.not(isInternal);
 
         Architectures.layeredArchitecture()
                 .consideringAllDependencies()
-                .layer("Baseline").definedBy("com.coralstay.pathfinderspringbackend.baseline..")
-                .layer("Field").definedBy("com.coralstay.pathfinderspringbackend.field..")
-                .layer("Progress").definedBy("com.coralstay.pathfinderspringbackend.progress..")
-                .layer("Valuation").definedBy("com.coralstay.pathfinderspringbackend.valuation..")
-                .layer("Insights").definedBy("com.coralstay.pathfinderspringbackend.insights..")
+                .layer("Baseline").definedBy(PersistenceConstants.BASELINE_PACKAGE + "..")
+                .layer("Field").definedBy(PersistenceConstants.FIELD_PACKAGE + "..")
+                .layer("Progress").definedBy(PersistenceConstants.PROGRESS_PACKAGE + "..")
+                .layer("Valuation").definedBy(PersistenceConstants.VALUATION_PACKAGE + "..")
+                .layer("Insights").definedBy(PersistenceConstants.INSIGHTS_PACKAGE + "..")
 
                 .whereLayer("Baseline").mayNotAccessAnyLayer()
                 .whereLayer("Field").mayOnlyAccessLayers("Baseline")

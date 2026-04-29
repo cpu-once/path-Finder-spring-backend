@@ -1,11 +1,10 @@
 package com.coralstay.pathfinderspringbackend.valuation.infrastructure;
 
-import javax.sql.DataSource;
-
+import com.coralstay.pathfinderspringbackend.common.PersistenceConstants;
 import jakarta.persistence.EntityManagerFactory;
-
-import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -14,20 +13,18 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableJpaRepositories(
-        basePackages = ValuationPersistenceConfig.BASE_PACKAGE,
-        entityManagerFactoryRef = "valuationEntityManagerFactory",
-        transactionManagerRef = "valuationTransactionManager"
+        basePackages = PersistenceConstants.VALUATION_PACKAGE,
+        entityManagerFactoryRef = PersistenceConstants.VALUATION_ENTITY_MANAGER_FACTORY,
+        transactionManagerRef = PersistenceConstants.VALUATION_TRANSACTION_MANAGER
 )
 public class ValuationPersistenceConfig {
 
-    public static final String BASE_PACKAGE = "com.coralstay.pathfinderspringbackend.valuation";
-    public static final String DATASOURCE_PREFIX = "app.datasource.valuation";
-    public static final String UNIT_NAME = "valuation";
-
     @Bean
-    @ConfigurationProperties(DATASOURCE_PREFIX)
+    @ConfigurationProperties(PersistenceConstants.VALUATION_DATASOURCE_PROPERTIES)
     public DataSourceProperties valuationDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -39,17 +36,17 @@ public class ValuationPersistenceConfig {
                 .build();
     }
 
-    @Bean
+    @Bean(name = PersistenceConstants.VALUATION_ENTITY_MANAGER_FACTORY)
     public LocalContainerEntityManagerFactoryBean valuationEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(valuationDataSource());
-        factory.setPackagesToScan(BASE_PACKAGE);
+        factory.setPackagesToScan(PersistenceConstants.VALUATION_PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName(UNIT_NAME);
+        factory.setPersistenceUnitName(PersistenceConstants.VALUATION_PERSISTENCE_UNIT);
         return factory;
     }
 
-    @Bean
+    @Bean(name = PersistenceConstants.VALUATION_TRANSACTION_MANAGER)
     public PlatformTransactionManager valuationTransactionManager(
             EntityManagerFactory valuationEntityManagerFactory) {
         return new JpaTransactionManager(valuationEntityManagerFactory);
