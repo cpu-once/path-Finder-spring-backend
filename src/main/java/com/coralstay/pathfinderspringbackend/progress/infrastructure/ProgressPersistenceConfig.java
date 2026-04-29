@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.progress.persistence;
+package com.coralstay.pathfinderspringbackend.progress.infrastructure;
 
 import javax.sql.DataSource;
 
@@ -16,14 +16,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.coralstay.pathfinderspringbackend.progress",
+        basePackages = ProgressPersistenceConfig.BASE_PACKAGE,
         entityManagerFactoryRef = "progressEntityManagerFactory",
         transactionManagerRef = "progressTransactionManager"
 )
 public class ProgressPersistenceConfig {
 
+    public static final String BASE_PACKAGE = "com.coralstay.pathfinderspringbackend.progress";
+    public static final String DATASOURCE_PREFIX = "app.datasource.progress";
+    public static final String UNIT_NAME = "progress";
+
     @Bean
-    @ConfigurationProperties("app.datasource.progress")
+    @ConfigurationProperties(DATASOURCE_PREFIX)
     public DataSourceProperties progressDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -39,9 +43,9 @@ public class ProgressPersistenceConfig {
     public LocalContainerEntityManagerFactoryBean progressEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(progressDataSource());
-        factory.setPackagesToScan("com.coralstay.pathfinderspringbackend.progress");
+        factory.setPackagesToScan(BASE_PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName("progress");
+        factory.setPersistenceUnitName(UNIT_NAME);
         return factory;
     }
 

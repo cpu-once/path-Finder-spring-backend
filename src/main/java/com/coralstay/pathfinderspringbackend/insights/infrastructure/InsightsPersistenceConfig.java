@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.insights.persistence;
+package com.coralstay.pathfinderspringbackend.insights.infrastructure;
 
 import javax.sql.DataSource;
 
@@ -16,14 +16,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.coralstay.pathfinderspringbackend.insights",
+        basePackages = InsightsPersistenceConfig.BASE_PACKAGE,
         entityManagerFactoryRef = "insightsEntityManagerFactory",
         transactionManagerRef = "insightsTransactionManager"
 )
 public class InsightsPersistenceConfig {
 
+    public static final String BASE_PACKAGE = "com.coralstay.pathfinderspringbackend.insights";
+    public static final String DATASOURCE_PREFIX = "app.datasource.insights";
+    public static final String UNIT_NAME = "insights";
+
     @Bean
-    @ConfigurationProperties("app.datasource.insights")
+    @ConfigurationProperties(DATASOURCE_PREFIX)
     public DataSourceProperties insightsDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -39,9 +43,9 @@ public class InsightsPersistenceConfig {
     public LocalContainerEntityManagerFactoryBean insightsEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(insightsDataSource());
-        factory.setPackagesToScan("com.coralstay.pathfinderspringbackend.insights");
+        factory.setPackagesToScan(BASE_PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName("insights");
+        factory.setPersistenceUnitName(UNIT_NAME);
         return factory;
     }
 

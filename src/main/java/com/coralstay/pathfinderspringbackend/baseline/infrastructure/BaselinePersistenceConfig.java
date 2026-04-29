@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.baseline.persistence;
+package com.coralstay.pathfinderspringbackend.baseline.infrastructure;
 
 import javax.sql.DataSource;
 
@@ -17,15 +17,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.coralstay.pathfinderspringbackend.baseline",
+        basePackages = BaselinePersistenceConfig.BASE_PACKAGE,
         entityManagerFactoryRef = "baselineEntityManagerFactory",
         transactionManagerRef = "baselineTransactionManager"
 )
 public class BaselinePersistenceConfig {
 
+    public static final String BASE_PACKAGE = "com.coralstay.pathfinderspringbackend.baseline";
+    public static final String DATASOURCE_PREFIX = "app.datasource.baseline";
+    public static final String UNIT_NAME = "baseline";
+
     @Primary
     @Bean
-    @ConfigurationProperties("app.datasource.baseline")
+    @ConfigurationProperties(DATASOURCE_PREFIX)
     public DataSourceProperties baselineDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -43,9 +47,9 @@ public class BaselinePersistenceConfig {
     public LocalContainerEntityManagerFactoryBean baselineEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(baselineDataSource());
-        factory.setPackagesToScan("com.coralstay.pathfinderspringbackend.baseline");
+        factory.setPackagesToScan(BASE_PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName("baseline");
+        factory.setPersistenceUnitName(UNIT_NAME);
         return factory;
     }
 

@@ -3,7 +3,13 @@
     "allow": [
       "Bash(./gradlew build:*)",
       "Bash(xargs -I{} jar tf {})",
-      "Bash(jar tf:*)"
+      "Bash(jar tf:*)",
+      "Bash(mv baseline/persistence/BaselinePersistenceConfig.java baseline/infrastructure/BaselinePersistenceConfig.java)",
+      "Bash(mv field/persistence/FieldPersistenceConfig.java field/infrastructure/FieldPersistenceConfig.java)",
+      "Bash(mv insights/persistence/InsightsPersistenceConfig.java insights/infrastructure/InsightsPersistenceConfig.java)",
+      "Bash(mv progress/persistence/ProgressPersistenceConfig.java progress/infrastructure/ProgressPersistenceConfig.java)",
+      "Bash(mv valuation/persistence/ValuationPersistenceConfig.java valuation/infrastructure/ValuationPersistenceConfig.java)",
+      "Bash(./gradlew test:*)"
     ]
   }
 }

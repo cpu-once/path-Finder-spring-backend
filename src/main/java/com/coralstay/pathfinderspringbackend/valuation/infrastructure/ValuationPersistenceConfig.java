@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.valuation.persistence;
+package com.coralstay.pathfinderspringbackend.valuation.infrastructure;
 
 import javax.sql.DataSource;
 
@@ -16,14 +16,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.coralstay.pathfinderspringbackend.valuation",
+        basePackages = ValuationPersistenceConfig.BASE_PACKAGE,
         entityManagerFactoryRef = "valuationEntityManagerFactory",
         transactionManagerRef = "valuationTransactionManager"
 )
 public class ValuationPersistenceConfig {
 
+    public static final String BASE_PACKAGE = "com.coralstay.pathfinderspringbackend.valuation";
+    public static final String DATASOURCE_PREFIX = "app.datasource.valuation";
+    public static final String UNIT_NAME = "valuation";
+
     @Bean
-    @ConfigurationProperties("app.datasource.valuation")
+    @ConfigurationProperties(DATASOURCE_PREFIX)
     public DataSourceProperties valuationDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -39,9 +43,9 @@ public class ValuationPersistenceConfig {
     public LocalContainerEntityManagerFactoryBean valuationEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(valuationDataSource());
-        factory.setPackagesToScan("com.coralstay.pathfinderspringbackend.valuation");
+        factory.setPackagesToScan(BASE_PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName("valuation");
+        factory.setPersistenceUnitName(UNIT_NAME);
         return factory;
     }
 

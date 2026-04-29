@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.field.persistence;
+package com.coralstay.pathfinderspringbackend.field.infrastructure;
 
 import javax.sql.DataSource;
 
@@ -16,14 +16,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.coralstay.pathfinderspringbackend.field",
+        basePackages = FieldPersistenceConfig.BASE_PACKAGE,
         entityManagerFactoryRef = "fieldEntityManagerFactory",
         transactionManagerRef = "fieldTransactionManager"
 )
 public class FieldPersistenceConfig {
 
+    public static final String BASE_PACKAGE = "com.coralstay.pathfinderspringbackend.field";
+    public static final String DATASOURCE_PREFIX = "app.datasource.field";
+    public static final String UNIT_NAME = "field";
+
     @Bean
-    @ConfigurationProperties("app.datasource.field")
+    @ConfigurationProperties(DATASOURCE_PREFIX)
     public DataSourceProperties fieldDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -39,9 +43,9 @@ public class FieldPersistenceConfig {
     public LocalContainerEntityManagerFactoryBean fieldEntityManagerFactory() {
         var factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(fieldDataSource());
-        factory.setPackagesToScan("com.coralstay.pathfinderspringbackend.field");
+        factory.setPackagesToScan(BASE_PACKAGE);
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factory.setPersistenceUnitName("field");
+        factory.setPersistenceUnitName(UNIT_NAME);
         return factory;
     }
 
