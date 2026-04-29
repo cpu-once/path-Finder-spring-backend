@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew build:*)",
+      "Bash(xargs -I{} jar tf {})",
+      "Bash(jar tf:*)"
+    ]
+  }
+}
