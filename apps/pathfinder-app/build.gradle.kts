@@ -1,8 +1,8 @@
 plugins {
   java
-  id("org.springframework.boot") version "4.0.5"
-  id("io.spring.dependency-management") version "1.1.7"
-  id("org.asciidoctor.jvm.convert") version "4.0.5"
+  alias(libs.plugins.spring.boot)
+  alias(libs.plugins.spring.dependency.management)
+  alias(libs.plugins.asciidoctor)
 }
 
 group = "com.coralstay"
@@ -15,50 +15,45 @@ java {
   }
 }
 
-repositories {
-  mavenCentral()
-}
-
 extra["snippetsDir"] = file("build/generated-snippets")
-extra["springModulithVersion"] = "2.0.5"
 
 dependencies {
-  // 내부 모듈 의존성 추가
-  implementation(project(":libs:core-math"))
+  // 내부 모듈 의존성 추가 (projects.core.math 로 접근)
+  implementation(projects.core.math)
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
+  developmentOnly(libs.spring.boot.devtools)
 
-  implementation("org.springframework.modulith:spring-modulith-starter-core")
-  implementation("org.springframework.modulith:spring-modulith-starter-jpa")
+  implementation(libs.spring.modulith.starter.core)
+  implementation(libs.spring.modulith.starter.jpa)
 
-  implementation("org.springframework.boot:spring-boot-starter-validation")
-  implementation("org.springframework.boot:spring-boot-starter-webmvc")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("org.springframework.boot:spring-boot-h2console")
+  implementation(libs.spring.boot.starter.validation)
+  implementation(libs.spring.boot.starter.webmvc)
+  implementation(libs.spring.boot.starter.data.jpa)
+  implementation(libs.spring.boot.h2console)
 
-  implementation("net.datafaker:datafaker:2.1.0")
+  implementation(libs.datafaker)
 
-  compileOnly("org.projectlombok:lombok")
-  runtimeOnly("com.h2database:h2")
+  compileOnly(libs.lombok)
+  runtimeOnly(libs.h2)
 
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-  annotationProcessor("org.projectlombok:lombok")
+  annotationProcessor(libs.spring.boot.configuration.processor)
+  annotationProcessor(libs.lombok)
 
-  testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
-  testImplementation("org.springframework.boot:spring-boot-starter-restdocs")
-  testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
-  testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-  testImplementation("org.springframework.modulith:spring-modulith-starter-test")
-  testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+  testImplementation(libs.spring.boot.starter.data.jpa.test)
+  testImplementation(libs.spring.boot.starter.restdocs)
+  testImplementation(libs.spring.boot.starter.validation.test)
+  testImplementation(libs.spring.boot.starter.webmvc.test)
+  testImplementation(libs.spring.modulith.starter.test)
+  testImplementation(libs.spring.restdocs.mockmvc)
 
-  testCompileOnly("org.projectlombok:lombok")
-  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-  testAnnotationProcessor("org.projectlombok:lombok")
+  testCompileOnly(libs.lombok)
+  testRuntimeOnly(libs.junit.platform.launcher)
+  testAnnotationProcessor(libs.lombok)
 }
 
 dependencyManagement {
   imports {
-    mavenBom("org.springframework.modulith:spring-modulith-bom:${property("springModulithVersion")}")
+    mavenBom(libs.spring.modulith.bom.get().toString())
   }
 }
 

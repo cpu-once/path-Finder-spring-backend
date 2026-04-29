@@ -1,4 +1,6 @@
 rootProject.name = "pathFinder-spring-backend"
 
-include(":libs:core-math")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+include(":core:math")
 include(":apps:pathfinder-app")

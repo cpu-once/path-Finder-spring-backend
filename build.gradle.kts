@@ -1,7 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "4.0.5" apply false
-    id("io.spring.dependency-management") version "1.1.7" apply false
+    alias(libs.plugins.spring.boot) apply false
+    alias(libs.plugins.spring.dependency.management) apply false
+    alias(libs.plugins.asciidoctor) apply false
 }
 
 allprojects {
