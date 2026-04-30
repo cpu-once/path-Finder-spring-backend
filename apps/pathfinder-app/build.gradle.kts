@@ -39,6 +39,7 @@ dependencies {
   annotationProcessor(libs.spring.boot.configuration.processor)
   annotationProcessor(libs.lombok)
 
+  testImplementation(libs.spring.boot.starter.test)
   testImplementation(libs.spring.boot.starter.data.jpa.test)
   testImplementation(libs.spring.boot.starter.restdocs)
   testImplementation(libs.spring.boot.starter.validation.test)
@@ -47,7 +48,8 @@ dependencies {
   testImplementation(libs.spring.restdocs.mockmvc)
 
   testCompileOnly(libs.lombok)
-  testRuntimeOnly(libs.junit.platform.launcher)
+  // Spring Boot 의존성 관리에 위임
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
   testAnnotationProcessor(libs.lombok)
 }
 

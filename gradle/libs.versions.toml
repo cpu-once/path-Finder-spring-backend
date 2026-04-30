@@ -4,7 +4,6 @@ spring-dependency-management = "1.1.7"
 asciidoctor = "4.0.5"
 spring-modulith = "2.0.5"
 datafaker = "2.1.0"
-junit = "5.11.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -29,6 +28,7 @@ spring-boot-h2console = { module = "org.springframework.boot:spring-boot-h2conso
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 
 # Spring Boot Test
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-data-jpa-test = { module = "org.springframework.boot:spring-boot-starter-data-jpa-test" }
 spring-boot-starter-restdocs = { module = "org.springframework.boot:spring-boot-starter-restdocs" }
 spring-boot-starter-validation-test = { module = "org.springframework.boot:spring-boot-starter-validation-test" }
@@ -39,7 +39,3 @@ spring-restdocs-mockmvc = { module = "org.springframework.restdocs:spring-restdo
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
 lombok = { module = "org.projectlombok:lombok" }
 h2 = { module = "com.h2database:h2" }
-
-# JUnit
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
