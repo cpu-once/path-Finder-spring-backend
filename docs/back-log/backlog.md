@@ -36,9 +36,7 @@
 - `[ ]` [Story] `BaselineDataSeeder`: Datafaker 객체를 활용해 Project, Task 등 초기 기본 설정 데이터 100건 생성 및 DB insert 로직 구현
 - `[ ]` [Story] `FieldDataSeeder`: 생성된 Baseline 데이터를 바탕으로 가상의 작업자, 건설장비, 작업 일지 데이터 무작위 생성 로직 구현
 - `[ ]` [Story] `ProgressDataSeeder`: Field 데이터를 기반으로 공정률(Progress Rate), 지연 상태(Delay) 등을 계산한 임시 데이터 생성
-- `[ ]` [Story] `ValuationDataSeeder`: Progress 데이터를 기반으로 기성고(Valuation), 비용 청구 등의 재무 데이터 생성
-- `[ ]` [Story] `InsightsDataSeeder`: 앞선 모든 데이터를 집계하여 대시보드 통계용 Dummy 데이터 생성
-- `[ ]` [Task] 위 5개의 Seeder가 올바른 순서(Baseline -> Field -> Progress -> Valuation -> Insights)로 실행되도록 ApplicationRunner 등록
+- `[ ]` [Task] 위 3개의 Seeder가 올바른 순서(Baseline -> Field -> Progress)로 실행되도록 ApplicationRunner 등록
 
 ---
 
@@ -55,7 +53,7 @@
 - `[ ]` [Task] 루트 디렉터리에 `apps/pathfinder-batch` 신규 멀티 모듈 디렉토리 생성 및 `build.gradle.kts` 설정
 - `[ ]` [Task] 루트 `settings.gradle.kts`에 `:apps:pathfinder-batch` 등록
 - `[ ]` [Task] Batch 전용 애플리케이션 진입점(`@EnableBatchProcessing`) 클래스 작성
-- `[ ]` [Task] 일일 공정률(Progress) 정산 및 기성고(Valuation) 집계를 위한 첫 번째 Batch Job 및 Step(ItemReader, Processor, Writer) 구현
+- `[ ]` [Task] 일일 공정률(Progress) 집계를 위한 첫 번째 Batch Job 및 Step(ItemReader, Processor, Writer) 구현
 
 ---
 
@@ -116,15 +114,17 @@
 
 ---
 
-## Epic 7. Core Domain: IFC & Valuation Engine (New)
+## Epic 7. Core Domain: AI-Driven BIM Work Graph Query System (New)
 
-### [Story 7.1] IFC 4.3 Data Parsing & Model Mapping
+### [Story 7.1] IFC Data Ingestion & Graph Modeling
 - `[ ]` [Task] IFC 파싱을 위한 Java 라이브러리(IfcOpenShell 등) 리서치 및 `build.gradle.kts` 추가
-- `[ ]` [Task] `IfcWall`, `IfcSlab` 등 주요 건축 요소를 파싱하여 내부 POJO(AppWall, AppSlab 등)로 변환하는 파서 클래스 작성
-- `[ ]` [Task] 변환된 체적(Volume), 길이(Length), 면적(Area) 데이터를 DB에 저장하는 Repository 및 Entity 매핑 로직 구현
+- `[ ]` [Task] `IfcWall`, `IfcSlab` 등 개별 객체들을 파싱하여 공종(Trade) 또는 작업 단위(Task)로 묶는 `WorkGroup` Entity 설계
+- `[ ]` [Task] 그룹핑된 IFC 객체 군단 간의 선행/후행 작업 의존성을 나타내는 작업 그래프(DAG) 구조를 Java Class로 모델링
 
-### [Story 7.2] Valuation Mapping & Computation
-- `[ ]` [Task] 표준품셈/일위대가 단가 데이터를 로드하여 `valuation` 모듈 DB에 저장 (엑셀/CSV 파서 등 활용)
-- `[ ]` [Task] `baseline` 모듈의 IFC 객체(POJO)와 `valuation` 모듈의 일위대가 코드를 매핑하는 룰 엔진(Rule Engine) 초안 작성
-- `[ ]` [Task] (예: 체적 * 단위당 단가) 비용 산출 로직을 담당하는 핵심 Valuation Service 구현
-- `[ ]` [Task] 산출된 비용 내역을 바탕으로 총 프로젝트 예상 비용(Estimate Cost)을 반환하는 REST API 컨트롤러 구현
+### [Story 7.2] LLM Context Preparation & Serialization
+- `[ ]` [Task] 메모리에 구축된 작업 그래프 객체(Java Class)들을 AI가 구조적으로 이해하기 쉬운 형태(JSON, YAML, 또는 Graph 형태의 문자열)로 직렬화(Serialize)하는 유틸리티 구현
+- `[ ]` [Task] 직렬화된 데이터와 함께 "이 공종이 지연되면 크리티컬 패스(Critical Path)는 어떻게 바뀌어?", "이 작업에 할당된 벽체들의 총 체적은 얼마야?" 등을 묻기 위한 프롬프트 템플릿(Prompt Template) 설계
+
+### [Story 7.3] AI Query Integration (Spring AI / LangChain)
+- `[ ]` [Task] `build.gradle.kts`에 `spring-ai` (또는 `langchain4j`) 의존성을 추가하여 OpenAI/Claude API 연동 설정
+- `[ ]` [Task] 프론트엔드에서 자연어 질의를 받아, 백엔드에서 객체 그래프 컨텍스트(Context)를 RAG 방식으로 주입한 후 AI에게 질의하고 답변을 반환하는 REST API 컨트롤러 구현
