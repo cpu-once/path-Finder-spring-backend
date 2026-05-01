@@ -10,23 +10,24 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 public class EncapsulationTest {
 
+    private static final String ROOT_PACKAGE = "com.coralstay.pathfinderspringbackend";
+    private static final String DESC_REPOSITORIES_ENTITIES_PACKAGE_PRIVATE = "Entity와 Repository는 외부 모듈에서 직접 접근하지 못하도록 package-private 제한을 권장한다";
+    private static final String REPOSITORY_SUFFIX = ".*Repository";
+    private static final String ENTITY_SUFFIX = ".*Entity";
+
     private static JavaClasses classes;
 
     @BeforeAll
     static void setup() {
-        classes = new ClassFileImporter().importPackages("com.coralstay.pathfinderspringbackend");
+        classes = new ClassFileImporter().importPackages(ROOT_PACKAGE);
     }
 
     @Test
-    @DisplayName("Entity와 Repository는 외부 모듈에서 직접 접근하지 못하도록 package-private 제한을 권장한다")
+    @DisplayName(DESC_REPOSITORIES_ENTITIES_PACKAGE_PRIVATE)
     void repositoriesAndEntitiesShouldBePackagePrivate() {
-        // 단, Spring Boot의 Entity/Repository 특성상 protected/public이 필요할 수도 있지만,
-        // 모듈 분리를 철저히 하기 위해 최소한 UseCase/Service를 제외한
-        // 핵심 인프라 객체들은 가능하면 외부에 열리지 않도록 관리하는 것이 좋습니다.
-
         classes()
-                .that().haveNameMatching(".*Repository")
-                .or().haveNameMatching(".*Entity")
+                .that().haveNameMatching(REPOSITORY_SUFFIX)
+                .or().haveNameMatching(ENTITY_SUFFIX)
                 .should().bePackagePrivate()
                 .orShould().beProtected()
                 .check(classes);

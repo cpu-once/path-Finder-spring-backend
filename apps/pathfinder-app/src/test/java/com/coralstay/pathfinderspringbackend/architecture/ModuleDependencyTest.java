@@ -18,6 +18,15 @@ import org.junit.jupiter.api.Test;
 public class ModuleDependencyTest {
 
     private static final String ROOT = "com.coralstay.pathfinderspringbackend";
+    private static final String PACKAGE_SUFFIX = "..";
+
+    private static final String DESC_UNIDIRECTIONAL_PIPELINE = "단방향 파이프라인 의존성을 위반하면 안 된다";
+
+    private static final String LAYER_BASELINE = "Baseline";
+    private static final String LAYER_FIELD = "Field";
+    private static final String LAYER_PROGRESS = "Progress";
+    private static final String LAYER_VALUATION = "Valuation";
+    private static final String LAYER_INSIGHTS = "Insights";
 
     private static JavaClasses classes;
 
@@ -27,24 +36,24 @@ public class ModuleDependencyTest {
     }
 
     @Test
-    @DisplayName("단방향 파이프라인 의존성을 위반하면 안 된다")
+    @DisplayName(DESC_UNIDIRECTIONAL_PIPELINE)
     void unidirectionalPipeline() {
-        DescribedPredicate<JavaClass> isInternal = Predicates.resideInAPackage(ROOT + "..");
+        DescribedPredicate<JavaClass> isInternal = Predicates.resideInAPackage(ROOT + PACKAGE_SUFFIX);
         DescribedPredicate<JavaClass> isExternal = DescribedPredicate.not(isInternal);
 
         Architectures.layeredArchitecture()
                 .consideringAllDependencies()
-                .layer("Baseline").definedBy(BaselinePersistenceConstants.PACKAGE + "..")
-                .layer("Field").definedBy(FieldPersistenceConstants.PACKAGE + "..")
-                .layer("Progress").definedBy(ProgressPersistenceConstants.PACKAGE + "..")
-                .layer("Valuation").definedBy(ValuationPersistenceConstants.PACKAGE + "..")
-                .layer("Insights").definedBy(InsightsPersistenceConstants.PACKAGE + "..")
+                .layer(LAYER_BASELINE).definedBy(BaselinePersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
+                .layer(LAYER_FIELD).definedBy(FieldPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
+                .layer(LAYER_PROGRESS).definedBy(ProgressPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
+                .layer(LAYER_VALUATION).definedBy(ValuationPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
+                .layer(LAYER_INSIGHTS).definedBy(InsightsPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
 
-                .whereLayer("Baseline").mayNotAccessAnyLayer()
-                .whereLayer("Field").mayOnlyAccessLayers("Baseline")
-                .whereLayer("Progress").mayOnlyAccessLayers("Baseline", "Field")
-                .whereLayer("Valuation").mayOnlyAccessLayers("Baseline", "Field", "Progress")
-                .whereLayer("Insights").mayOnlyAccessLayers("Baseline", "Field", "Progress", "Valuation")
+                .whereLayer(LAYER_BASELINE).mayNotAccessAnyLayer()
+                .whereLayer(LAYER_FIELD).mayOnlyAccessLayers(LAYER_BASELINE)
+                .whereLayer(LAYER_PROGRESS).mayOnlyAccessLayers(LAYER_BASELINE, LAYER_FIELD)
+                .whereLayer(LAYER_VALUATION).mayOnlyAccessLayers(LAYER_BASELINE, LAYER_FIELD, LAYER_PROGRESS)
+                .whereLayer(LAYER_INSIGHTS).mayOnlyAccessLayers(LAYER_BASELINE, LAYER_FIELD, LAYER_PROGRESS, LAYER_VALUATION)
                 .ignoreDependency(isInternal, isExternal)
                 .check(classes);
     }

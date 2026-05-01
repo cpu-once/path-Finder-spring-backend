@@ -9,6 +9,8 @@ import org.springframework.modulith.docs.Documenter;
 
 public class DocumentationTest {
 
+    private static final String DESC_WRITE_DOCUMENTATION = "모듈 문서 작성: PlantUML 다이어그램 및 캔버스 생성";
+
     private static ApplicationModules modules;
 
     @BeforeAll
@@ -17,7 +19,7 @@ public class DocumentationTest {
     }
 
     @Test
-    @DisplayName("모듈 문서 작성: PlantUML 다이어그램 및 캔버스 생성")
+    @DisplayName(DESC_WRITE_DOCUMENTATION)
     void writeDocumentation() {
         new Documenter(modules)
                 .writeModulesAsPlantUml()

@@ -11,23 +11,32 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class BaselineArchitectureTest {
 
+    private static final String ROOT_PACKAGE = "com.coralstay.pathfinderspringbackend";
+    private static final String DESC_BASELINE_SHOULD_NOT_DEPEND_ON_OTHER_MODULES = "Baseline 모듈은 다른 모듈에 의존하지 않아야 한다";
+    private static final String PACKAGE_SUFFIX = "..";
+
+    private static final String FIELD_PACKAGE = "com.coralstay.pathfinderspringbackend.field..";
+    private static final String PROGRESS_PACKAGE = "com.coralstay.pathfinderspringbackend.progress..";
+    private static final String VALUATION_PACKAGE = "com.coralstay.pathfinderspringbackend.valuation..";
+    private static final String INSIGHTS_PACKAGE = "com.coralstay.pathfinderspringbackend.insights..";
+
     private static JavaClasses classes;
 
     @BeforeAll
     static void setup() {
-        classes = new ClassFileImporter().importPackages("com.coralstay.pathfinderspringbackend");
+        classes = new ClassFileImporter().importPackages(ROOT_PACKAGE);
     }
 
     @Test
-    @DisplayName("Baseline 모듈은 다른 모듈에 의존하지 않아야 한다")
+    @DisplayName(DESC_BASELINE_SHOULD_NOT_DEPEND_ON_OTHER_MODULES)
     void baselineShouldNotDependOnOtherModules() {
         noClasses()
-                .that().resideInAPackage(BaselinePersistenceConstants.PACKAGE + "..")
+                .that().resideInAPackage(BaselinePersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
                 .should().dependOnClassesThat().resideInAnyPackage(
-                        "com.coralstay.pathfinderspringbackend.field..",
-                        "com.coralstay.pathfinderspringbackend.progress..",
-                        "com.coralstay.pathfinderspringbackend.valuation..",
-                        "com.coralstay.pathfinderspringbackend.insights.."
+                        FIELD_PACKAGE,
+                        PROGRESS_PACKAGE,
+                        VALUATION_PACKAGE,
+                        INSIGHTS_PACKAGE
                 )
                 .check(classes);
     }

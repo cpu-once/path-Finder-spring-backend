@@ -20,33 +20,68 @@ import org.springframework.context.annotation.Configuration;
 
 public class NamingConventionTest {
 
+    private static final String ROOT_PACKAGE = "com.coralstay.pathfinderspringbackend";
+    private static final String TEST_CLASSES_PATH = "build/classes/java/test";
+
+    private static final String ALL_PACKAGES = "..";
+    private static final String ROOT_PACKAGE_SUFFIX = "com.coralstay.pathfinderspringbackend..";
+
+    private static final String CONFIG_SUFFIX = "Config";
+    private static final String SERVICE_SUFFIX = "Service";
+    private static final String DATA_SEEDER_SUFFIX = "DataSeeder";
+    private static final String INTERFACE_PREFIX = "I";
+    private static final String TEST_SUFFIX_1 = "Test";
+    private static final String TEST_SUFFIX_2 = "Tests";
+
+    private static final String UTIL_SUFFIX_1 = "Util";
+    private static final String UTIL_SUFFIX_2 = "Utils";
+    private static final String HELPER_SUFFIX = "Helper";
+
+    private static final String MSG_ERR_UPPERCASE_PACKAGE = "패키지명이 대문자를 포함합니다: ";
+    private static final String MSG_COND_LOWERCASE_PACKAGE = "패키지명은 소문자여야 함";
+    private static final String MSG_BECAUSE_PUBLIC_FIELDS = "public 인스턴스 필드는 캡슐화를 깨뜨린다. getter/setter 또는 record를 사용해야 한다";
+
+    // Display Name Constants
+    private static final String DESC_PACKAGE_NAMING_TEST = "패키지 명명 규약";
+    private static final String DESC_PACKAGE_NAMES_SHOULD_BE_LOWERCASE = "모든 패키지명은 소문자여야 한다";
+
+    private static final String DESC_COMPONENT_NAMING_TEST = "컴포넌트 명명 규약";
+    private static final String DESC_CONFIGURATION_CLASSES_SHOULD_END_WITH_CONFIG = "@Configuration 클래스는 Config로 끝나야 한다";
+    private static final String DESC_SERVICE_CLASSES_SHOULD_END_WITH_SERVICE = "@Service 클래스는 Service로 끝나야 한다";
+    private static final String DESC_DATA_SEEDER_IMPLEMENTATIONS_SHOULD_END_WITH_DATA_SEEDER = "DataSeeder 구현체는 DataSeeder로 끝나야 한다";
+    private static final String DESC_INTERFACES_SHOULD_NOT_START_WITH_I = "인터페이스 이름에 Impl 접두사를 사용하면 안 된다";
+
+    private static final String DESC_TEST_CLASS_NAMING_TEST = "테스트 클래스 명명 규약";
+    private static final String DESC_TEST_CLASSES_SHOULD_END_WITH_TEST = "테스트 클래스는 Test로 끝나야 한다";
+
+    private static final String DESC_CODING_STYLE_TEST = "Java 코딩 스타일 제약";
+    private static final String DESC_NO_PUBLIC_FIELDS_EXCEPT_CONSTANTS = "public 필드는 static final(상수)만 허용한다";
+    private static final String DESC_UTILITY_CLASSES_SHOULD_NOT_BE_INSTANTIABLE = "유틸리티 클래스(모든 메서드가 static)는 인스턴스화를 막아야 한다";
+
     private static JavaClasses productionClasses;
     private static JavaClasses testClasses;
 
     @BeforeAll
     static void setup() {
-        productionClasses = new ClassFileImporter()
-                .importPackages("com.coralstay.pathfinderspringbackend");
-        testClasses = new ClassFileImporter()
-                .importPaths("build/classes/java/test");
+        productionClasses = new ClassFileImporter().importPackages(ROOT_PACKAGE);
+        testClasses = new ClassFileImporter().importPaths(TEST_CLASSES_PATH);
     }
 
     @Nested
-    @DisplayName("패키지 명명 규약")
+    @DisplayName(DESC_PACKAGE_NAMING_TEST)
     class PackageNamingTest {
 
         @Test
-        @DisplayName("모든 패키지명은 소문자여야 한다")
+        @DisplayName(DESC_PACKAGE_NAMES_SHOULD_BE_LOWERCASE)
         void packageNamesShouldBeLowercase() {
             ArchRule rule = classes()
-                    .should().resideInAPackage("..")
-                    .andShould(new ArchCondition<JavaClass>("패키지명은 소문자여야 함") {
+                    .should().resideInAPackage(ALL_PACKAGES)
+                    .andShould(new ArchCondition<JavaClass>(MSG_COND_LOWERCASE_PACKAGE) {
                         @Override
                         public void check(JavaClass item, ConditionEvents events) {
                             String packageName = item.getPackageName();
                             if (!packageName.equals(packageName.toLowerCase())) {
-                                events.add(SimpleConditionEvent.violated(item,
-                                        "패키지명이 대문자를 포함합니다: " + packageName));
+                                events.add(SimpleConditionEvent.violated(item, MSG_ERR_UPPERCASE_PACKAGE + packageName));
                             }
                         }
                     });
@@ -55,85 +90,85 @@ public class NamingConventionTest {
     }
 
     @Nested
-    @DisplayName("컴포넌트 명명 규약")
+    @DisplayName(DESC_COMPONENT_NAMING_TEST)
     class ComponentNamingTest {
 
         @Test
-        @DisplayName("@Configuration 클래스는 Config로 끝나야 한다")
+        @DisplayName(DESC_CONFIGURATION_CLASSES_SHOULD_END_WITH_CONFIG)
         void configurationClassesShouldEndWithConfig() {
             classes()
                     .that().areAnnotatedWith(Configuration.class)
-                    .should().haveSimpleNameEndingWith("Config")
+                    .should().haveSimpleNameEndingWith(CONFIG_SUFFIX)
                     .check(productionClasses);
         }
 
         @Test
-        @DisplayName("@Service 클래스는 Service로 끝나야 한다")
+        @DisplayName(DESC_SERVICE_CLASSES_SHOULD_END_WITH_SERVICE)
         void serviceClassesShouldEndWithService() {
             classes()
                     .that().areAnnotatedWith(Service.class)
-                    .should().haveSimpleNameEndingWith("Service")
+                    .should().haveSimpleNameEndingWith(SERVICE_SUFFIX)
                     .allowEmptyShould(true)
                     .check(productionClasses);
         }
 
         @Test
-        @DisplayName("DataSeeder 구현체는 DataSeeder로 끝나야 한다")
+        @DisplayName(DESC_DATA_SEEDER_IMPLEMENTATIONS_SHOULD_END_WITH_DATA_SEEDER)
         void dataSeederImplementationsShouldEndWithDataSeeder() {
             classes()
                     .that().implement(com.coralstay.pathfinderspringbackend.baseline.simulation.DataSeeder.class)
-                    .should().haveSimpleNameEndingWith("DataSeeder")
+                    .should().haveSimpleNameEndingWith(DATA_SEEDER_SUFFIX)
                     .check(productionClasses);
         }
 
         @Test
-        @DisplayName("인터페이스 이름에 Impl 접두사를 사용하면 안 된다")
+        @DisplayName(DESC_INTERFACES_SHOULD_NOT_START_WITH_I)
         void interfacesShouldNotStartWithI() {
             classes()
                     .that().areInterfaces()
-                    .should().haveSimpleNameNotStartingWith("I")
+                    .should().haveSimpleNameNotStartingWith(INTERFACE_PREFIX)
                     .check(productionClasses);
         }
     }
 
     @Nested
-    @DisplayName("테스트 클래스 명명 규약")
+    @DisplayName(DESC_TEST_CLASS_NAMING_TEST)
     class TestClassNamingTest {
 
         @Test
-        @DisplayName("테스트 클래스는 Test로 끝나야 한다")
+        @DisplayName(DESC_TEST_CLASSES_SHOULD_END_WITH_TEST)
         void testClassesShouldEndWithTest() {
             classes()
-                    .that().resideInAPackage("com.coralstay.pathfinderspringbackend..")
-                    .should().haveSimpleNameEndingWith("Test")
-                    .orShould().haveSimpleNameEndingWith("Tests")
+                    .that().resideInAPackage(ROOT_PACKAGE_SUFFIX)
+                    .should().haveSimpleNameEndingWith(TEST_SUFFIX_1)
+                    .orShould().haveSimpleNameEndingWith(TEST_SUFFIX_2)
                     .check(testClasses);
         }
     }
 
     @Nested
-    @DisplayName("Java 코딩 스타일 제약")
+    @DisplayName(DESC_CODING_STYLE_TEST)
     class CodingStyleTest {
 
         @Test
-        @DisplayName("public 필드는 static final(상수)만 허용한다")
+        @DisplayName(DESC_NO_PUBLIC_FIELDS_EXCEPT_CONSTANTS)
         void noPublicFieldsExceptConstants() {
             noFields()
                     .that().arePublic()
                     .and().areNotStatic()
                     .should().bePrivate()
                     .allowEmptyShould(true)
-                    .because("public 인스턴스 필드는 캡슐화를 깨뜨린다. getter/setter 또는 record를 사용해야 한다")
+                    .because(MSG_BECAUSE_PUBLIC_FIELDS)
                     .check(productionClasses);
         }
 
         @Test
-        @DisplayName("유틸리티 클래스(모든 메서드가 static)는 인스턴스화를 막아야 한다")
+        @DisplayName(DESC_UTILITY_CLASSES_SHOULD_NOT_BE_INSTANTIABLE)
         void utilityClassesShouldNotBeInstantiable() {
             classes()
-                    .that().haveSimpleNameEndingWith("Util")
-                    .or().haveSimpleNameEndingWith("Utils")
-                    .or().haveSimpleNameEndingWith("Helper")
+                    .that().haveSimpleNameEndingWith(UTIL_SUFFIX_1)
+                    .or().haveSimpleNameEndingWith(UTIL_SUFFIX_2)
+                    .or().haveSimpleNameEndingWith(HELPER_SUFFIX)
                     .should().haveOnlyFinalFields()
                     .allowEmptyShould(true)
                     .check(productionClasses);

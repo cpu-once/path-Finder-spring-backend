@@ -11,24 +11,33 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class InsightsArchitectureTest {
 
+    private static final String ROOT_PACKAGE = "com.coralstay.pathfinderspringbackend";
+    private static final String DESC_OTHER_MODULES_SHOULD_NOT_DEPEND_ON_INSIGHTS = "Insights 모듈은 다른 모듈의 의존성을 가질 수 있지만, 역으로 다른 모듈이 Insights 모듈에 의존해서는 안 된다";
+    private static final String PACKAGE_SUFFIX = "..";
+
+    private static final String BASELINE_PACKAGE = "com.coralstay.pathfinderspringbackend.baseline..";
+    private static final String FIELD_PACKAGE = "com.coralstay.pathfinderspringbackend.field..";
+    private static final String PROGRESS_PACKAGE = "com.coralstay.pathfinderspringbackend.progress..";
+    private static final String VALUATION_PACKAGE = "com.coralstay.pathfinderspringbackend.valuation..";
+
     private static JavaClasses classes;
 
     @BeforeAll
     static void setup() {
-        classes = new ClassFileImporter().importPackages("com.coralstay.pathfinderspringbackend");
+        classes = new ClassFileImporter().importPackages(ROOT_PACKAGE);
     }
 
     @Test
-    @DisplayName("Insights 모듈은 다른 모듈의 의존성을 가질 수 있지만, 역으로 다른 모듈이 Insights 모듈에 의존해서는 안 된다")
+    @DisplayName(DESC_OTHER_MODULES_SHOULD_NOT_DEPEND_ON_INSIGHTS)
     void otherModulesShouldNotDependOnInsights() {
         noClasses()
                 .that().resideInAnyPackage(
-                        "com.coralstay.pathfinderspringbackend.baseline..",
-                        "com.coralstay.pathfinderspringbackend.field..",
-                        "com.coralstay.pathfinderspringbackend.progress..",
-                        "com.coralstay.pathfinderspringbackend.valuation.."
+                        BASELINE_PACKAGE,
+                        FIELD_PACKAGE,
+                        PROGRESS_PACKAGE,
+                        VALUATION_PACKAGE
                 )
-                .should().dependOnClassesThat().resideInAPackage(InsightsPersistenceConstants.PACKAGE + "..")
+                .should().dependOnClassesThat().resideInAPackage(InsightsPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
                 .check(classes);
     }
 }
