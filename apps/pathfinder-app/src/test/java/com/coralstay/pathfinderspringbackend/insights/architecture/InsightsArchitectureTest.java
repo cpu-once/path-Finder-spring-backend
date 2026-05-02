@@ -12,12 +12,9 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 public class InsightsArchitectureTest {
 
     private static final String ROOT_PACKAGE = "com.coralstay.pathfinderspringbackend";
-    private static final String DESC_OTHER_MODULES_SHOULD_NOT_DEPEND_ON_INSIGHTS = "Insights 모듈은 다른 모듈의 의존성을 가질 수 있지만, 역으로 다른 모듈이 Insights 모듈에 의존해서는 안 된다";
+    private static final String DESC_INSIGHTS_SHOULD_NOT_DEPEND_ON_VALUATION = "Insights 모듈은 Valuation 모듈에 의존하지 않아야 한다";
     private static final String PACKAGE_SUFFIX = "..";
 
-    private static final String BASELINE_PACKAGE = "com.coralstay.pathfinderspringbackend.baseline..";
-    private static final String FIELD_PACKAGE = "com.coralstay.pathfinderspringbackend.field..";
-    private static final String PROGRESS_PACKAGE = "com.coralstay.pathfinderspringbackend.progress..";
     private static final String VALUATION_PACKAGE = "com.coralstay.pathfinderspringbackend.valuation..";
 
     private static JavaClasses classes;
@@ -28,16 +25,13 @@ public class InsightsArchitectureTest {
     }
 
     @Test
-    @DisplayName(DESC_OTHER_MODULES_SHOULD_NOT_DEPEND_ON_INSIGHTS)
-    void otherModulesShouldNotDependOnInsights() {
+    @DisplayName(DESC_INSIGHTS_SHOULD_NOT_DEPEND_ON_VALUATION)
+    void insightsShouldNotDependOnValuation() {
         noClasses()
-                .that().resideInAnyPackage(
-                        BASELINE_PACKAGE,
-                        FIELD_PACKAGE,
-                        PROGRESS_PACKAGE,
+                .that().resideInAPackage(InsightsPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
+                .should().dependOnClassesThat().resideInAnyPackage(
                         VALUATION_PACKAGE
                 )
-                .should().dependOnClassesThat().resideInAPackage(InsightsPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
                 .check(classes);
     }
 }

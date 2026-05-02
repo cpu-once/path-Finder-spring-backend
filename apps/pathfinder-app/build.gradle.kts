@@ -27,7 +27,7 @@ dependencies {
   implementation(libs.spring.modulith.starter.jpa)
 
   implementation(libs.spring.boot.starter.validation)
-  implementation(libs.spring.boot.starter.webmvc)
+  implementation(libs.spring.boot.starter.web)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.h2console)
 
@@ -40,12 +40,10 @@ dependencies {
   annotationProcessor(libs.lombok)
 
   testImplementation(libs.spring.boot.starter.test)
-  testImplementation(libs.spring.boot.starter.data.jpa.test)
-  testImplementation(libs.spring.boot.starter.restdocs)
-  testImplementation(libs.spring.boot.starter.validation.test)
   testImplementation(libs.spring.boot.starter.webmvc.test)
   testImplementation(libs.spring.modulith.starter.test)
   testImplementation(libs.spring.restdocs.mockmvc)
+  testImplementation(libs.archunit.junit5)
 
   testCompileOnly(libs.lombok)
   // Spring Boot 의존성 관리에 위임

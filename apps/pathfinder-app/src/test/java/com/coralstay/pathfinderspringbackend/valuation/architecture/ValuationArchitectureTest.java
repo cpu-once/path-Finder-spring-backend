@@ -12,9 +12,12 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 public class ValuationArchitectureTest {
 
     private static final String ROOT_PACKAGE = "com.coralstay.pathfinderspringbackend";
-    private static final String DESC_VALUATION_SHOULD_NOT_DEPEND_ON_UPPER_MODULES = "Valuation 모듈은 Insights 모듈에 의존하지 않아야 한다";
+    private static final String DESC_OTHER_MODULES_SHOULD_NOT_DEPEND_ON_VALUATION = "Valuation 모듈은 최상위 모듈이므로, 하위의 다른 모듈들이 Valuation 모듈에 의존해서는 안 된다";
     private static final String PACKAGE_SUFFIX = "..";
 
+    private static final String BASELINE_PACKAGE = "com.coralstay.pathfinderspringbackend.baseline..";
+    private static final String FIELD_PACKAGE = "com.coralstay.pathfinderspringbackend.field..";
+    private static final String PROGRESS_PACKAGE = "com.coralstay.pathfinderspringbackend.progress..";
     private static final String INSIGHTS_PACKAGE = "com.coralstay.pathfinderspringbackend.insights..";
 
     private static JavaClasses classes;
@@ -25,13 +28,16 @@ public class ValuationArchitectureTest {
     }
 
     @Test
-    @DisplayName(DESC_VALUATION_SHOULD_NOT_DEPEND_ON_UPPER_MODULES)
-    void valuationShouldNotDependOnUpperModules() {
+    @DisplayName(DESC_OTHER_MODULES_SHOULD_NOT_DEPEND_ON_VALUATION)
+    void otherModulesShouldNotDependOnValuation() {
         noClasses()
-                .that().resideInAPackage(ValuationPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
-                .should().dependOnClassesThat().resideInAnyPackage(
+                .that().resideInAnyPackage(
+                        BASELINE_PACKAGE,
+                        FIELD_PACKAGE,
+                        PROGRESS_PACKAGE,
                         INSIGHTS_PACKAGE
                 )
+                .should().dependOnClassesThat().resideInAPackage(ValuationPersistenceConstants.PACKAGE + PACKAGE_SUFFIX)
                 .check(classes);
     }
 }
