@@ -1,16 +1,16 @@
-package com.coralstay.pathfinderspringbackend.insights.listener;
+package com.coralstay.pathfinderspringbackend.insights.consumers;
 
 import com.coralstay.pathfinderspringbackend.insights.service.InsightsService;
-import com.coralstay.pathfinderspringbackend.valuation.event.ValuationCompletedEvent;
+import com.coralstay.pathfinderspringbackend.valuation.events.ValuationCompletedEvent;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValuationEventListener {
+public class ValuationEventConsumer {
 
     private final InsightsService insightsService;
 
-    public ValuationEventListener(InsightsService insightsService) {
+    public ValuationEventConsumer(InsightsService insightsService) {
         this.insightsService = insightsService;
     }
 

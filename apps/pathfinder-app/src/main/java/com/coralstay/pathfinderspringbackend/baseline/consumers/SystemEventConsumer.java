@@ -1,11 +1,11 @@
-package com.coralstay.pathfinderspringbackend.baseline.listener;
+package com.coralstay.pathfinderspringbackend.baseline.consumers;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SystemEventListener {
+public class SystemEventConsumer {
 
     /**
      * Baseline 모듈은 하위 의존성이 없으므로 다른 모듈의 이벤트를 구독하지 않습니다.

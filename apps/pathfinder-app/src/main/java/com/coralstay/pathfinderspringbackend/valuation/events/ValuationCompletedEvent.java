@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.valuation.event;
+package com.coralstay.pathfinderspringbackend.valuation.events;
 
 import java.math.BigDecimal;
 

@@ -1,16 +1,16 @@
-package com.coralstay.pathfinderspringbackend.progress.listener;
+package com.coralstay.pathfinderspringbackend.progress.consumers;
 
-import com.coralstay.pathfinderspringbackend.baseline.event.BaselineCreatedEvent;
+import com.coralstay.pathfinderspringbackend.baseline.events.BaselineCreatedEvent;
 import com.coralstay.pathfinderspringbackend.progress.service.ProgressService;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
-@Component("progressBaselineEventListener")
-public class BaselineEventListener {
+@Component("progressBaselineEventConsumer")
+public class BaselineEventConsumer {
 
     private final ProgressService progressService;
 
-    public BaselineEventListener(ProgressService progressService) {
+    public BaselineEventConsumer(ProgressService progressService) {
         this.progressService = progressService;
     }
 

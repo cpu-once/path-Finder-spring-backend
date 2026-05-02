@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.field.event;
+package com.coralstay.pathfinderspringbackend.field.events;
 
 /**
  * Field 데이터(현장 작업, 장비 배치 등)가 생성되었음을 알리는 이벤트

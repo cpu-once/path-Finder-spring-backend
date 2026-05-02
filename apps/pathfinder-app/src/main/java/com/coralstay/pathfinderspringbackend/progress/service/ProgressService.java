@@ -1,6 +1,6 @@
 package com.coralstay.pathfinderspringbackend.progress.service;
 
-import com.coralstay.pathfinderspringbackend.progress.event.ProgressUpdatedEvent;
+import com.coralstay.pathfinderspringbackend.progress.events.ProgressUpdatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,11 +1,11 @@
-package com.coralstay.pathfinderspringbackend.progress.listener;
+package com.coralstay.pathfinderspringbackend.progress.consumers;
 
-import com.coralstay.pathfinderspringbackend.field.event.FieldCreatedEvent;
+import com.coralstay.pathfinderspringbackend.field.events.FieldCreatedEvent;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FieldEventListener {
+public class FieldEventConsumer {
 
     @ApplicationModuleListener
     void onFieldCreated(FieldCreatedEvent event) {

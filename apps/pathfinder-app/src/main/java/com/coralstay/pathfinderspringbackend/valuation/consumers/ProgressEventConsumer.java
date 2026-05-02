@@ -1,16 +1,16 @@
-package com.coralstay.pathfinderspringbackend.valuation.listener;
+package com.coralstay.pathfinderspringbackend.valuation.consumers;
 
-import com.coralstay.pathfinderspringbackend.progress.event.ProgressUpdatedEvent;
+import com.coralstay.pathfinderspringbackend.progress.events.ProgressUpdatedEvent;
 import com.coralstay.pathfinderspringbackend.valuation.service.ValuationService;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProgressEventListener {
+public class ProgressEventConsumer {
 
     private final ValuationService valuationService;
 
-    public ProgressEventListener(ValuationService valuationService) {
+    public ProgressEventConsumer(ValuationService valuationService) {
         this.valuationService = valuationService;
     }
 

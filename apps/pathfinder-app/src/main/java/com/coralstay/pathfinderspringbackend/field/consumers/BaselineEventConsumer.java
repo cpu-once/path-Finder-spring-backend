@@ -1,16 +1,16 @@
-package com.coralstay.pathfinderspringbackend.field.listener;
+package com.coralstay.pathfinderspringbackend.field.consumers;
 
-import com.coralstay.pathfinderspringbackend.baseline.event.BaselineCreatedEvent;
+import com.coralstay.pathfinderspringbackend.baseline.events.BaselineCreatedEvent;
 import com.coralstay.pathfinderspringbackend.field.service.FieldService;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
-@Component("fieldBaselineEventListener")
-public class BaselineEventListener {
+@Component("fieldBaselineEventConsumer")
+public class BaselineEventConsumer {
 
     private final FieldService fieldService;
 
-    public BaselineEventListener(FieldService fieldService) {
+    public BaselineEventConsumer(FieldService fieldService) {
         this.fieldService = fieldService;
     }
 

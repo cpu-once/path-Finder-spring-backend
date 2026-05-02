@@ -12,6 +12,11 @@
 - `[ ]` [Task] Apache JMeter 또는 Gatling을 연동하여 로컬 환경에서 API 병목 및 부하 테스트 실시간 모니터링 환경 구축
 - `[ ]` [Task] JRebel 또는 DCEVM 같은 Hot-Swap 도구 리서치하여 코드 수정 즉시(Zero-restart) 반영되는 실시간 프로그래밍 환경 세팅
 
+### [Story 0.2] Advanced Runtime Observability & Control
+- `[ ]` [Task] **Heap Dump & Runtime Snapshot:** 런타임 중 특정 조건(OOM 전조, 특정 이벤트) 발생 시 자동으로 Heap Dump를 생성하고 관리하는 유틸리티 구현
+- `[ ]` [Task] **Dynamic Log Level Management:** Spring Actuator 또는 커스텀 엔드포인트를 통해 서버 재시작 없이 실시간으로 Logging Level(INFO -> DEBUG)을 조정하는 기능 구현
+- `[ ]` [Task] **Quota-aware Execution Control:** AI API(Gemini 등)의 Quota 상태를 모니터링하여, `Resource Exhausted` 발생 시 작업을 일시 중지하거나(Pause) 속도를 조절하는(Throttling) 제어 로직 구현
+
 ---
 
 ## Epic 1. Highest Priority: Core Domain (AI-Driven BIM Work Graph Query System)
@@ -68,7 +73,7 @@
 - `[ ]` [Task] Controller는 `*Controller` 또는 `*Api`로 끝나야 한다는 ArchUnit 규칙 추가
 - `[ ]` [Task] Domain Object(Entity, VO)는 Jpa 관련 어노테이션이나 Core 어노테이션 외의 Web/Service 레이어 의존성을 가지지 못하게 제한
 - `[x]` [Task] Define layer-specific structural constraints. (Applies to: DTO, Domain Object, Service, Repository, Controller) *(Completed)*
-- `[x]` [Task] Restrict dependencies between Controller -> Service -> Repository -> Domain layers within each package. *(Completed)*
+- `[ ]` [Task] Restrict dependencies between Controller -> Service -> Repository -> Domain layers within 각 package.
 - `[x]` [Task] Refactor all hardcoded string values to be programmable/dynamic constants. *(Completed)*
 
 ### [Story 3.5] Architecture Review & Alignment
@@ -152,3 +157,23 @@
 
 ### [Story 7.5] Human Inspection & Quality Gate
 - `[ ]` [Task] 자동화된 아키텍처 테스트(ArchUnit) 및 CI/CD 파이프라인을 통과하더라도, 반드시 사람(전문가)이 개입하여 코드의 도메인 의미와 구조적 합리성을 직접 인스펙션(Manual Code Review)하는 단계 공식화
+
+---
+
+## Epic 8. Cloud Infrastructure & MSA Deployment (AWS)
+
+### [Story 8.1] Containerization & Artifact Registry
+- `[ ]` [Task] Spring Boot 애플리케이션의 최적화된 Docker 이미지 생성을 위한 Multi-stage `Dockerfile` (또는 Cloud Native Buildpacks) 작성
+- `[ ]` [Task] GitHub Actions에 AWS ECR (Elastic Container Registry) 빌드 및 푸시 자동화 파이프라인 구축
+
+### [Story 8.2] Infrastructure as Code (IaC)
+- `[ ]` [Task] AWS CloudFormation (또는 Terraform)을 사용하여 VPC, Subnet, Security Group 등 기본 네트워크 인프라 코드화
+- `[ ]` [Task] 데이터베이스(RDS/Aurora PostgreSQL) 및 ElastiCache(Redis) 프로비저닝 스크립트 작성
+- `[ ]` [Task] 애플리케이션 구동을 위한 AWS ECS(Fargate) 또는 EKS 클러스터 프로비저닝 스크립트 작성
+
+### [Story 8.3] Secret Management
+- `[ ]` [Task] `application.yaml`의 민감 정보(DB 패스워드, JWT 시크릿, API Key 등)를 AWS Secrets Manager 또는 Parameter Store로 이관 및 연동
+
+### [Story 8.4] Fatal Alerting & Incident Response (Server Crash)
+- `[ ]` [Task] AWS CloudWatch 연동하여 ECS/EKS 컨테이너의 CPU/Memory 임계치 초과 및 OOM(Out Of Memory) 모니터링 대시보드 구축
+- `[ ]` [Task] 서버 애플리케이션 다운(Crash), 재시작 루프(CrashLoopBackOff), 또는 5xx 에러율 급증 시 AWS SNS + AWS Chatbot을 활용해 사내 Slack/Discord 채널로 PagerDuty(긴급 알림) 발송 로직 구현

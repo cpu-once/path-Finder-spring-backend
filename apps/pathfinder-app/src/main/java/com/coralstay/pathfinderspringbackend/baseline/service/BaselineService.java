@@ -1,6 +1,6 @@
 package com.coralstay.pathfinderspringbackend.baseline.service;
 
-import com.coralstay.pathfinderspringbackend.baseline.event.BaselineCreatedEvent;
+import com.coralstay.pathfinderspringbackend.baseline.events.BaselineCreatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
