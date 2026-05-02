@@ -1,5 +1,19 @@
 # Project Backlog (Step-by-Step Task Breakdown)
 
+## Epic 0. Absolute Priority: Real-time Developer Experience (DevEx) & Continuous Profiling
+
+### [Story 0.1] Real-time Quality & Performance Feedback Tools
+- `[ ]` [Task] `build.gradle.kts`에 `jacoco` 플러그인 추가 및 테스트 실행 시 실시간 커버리지 측정 환경 구축
+- `[ ]` [Task] JaCoCo 테스트 커버리지 최소 기준(Threshold, 예: Line 80%, Branch 70%) 강제 설정 (100% 목표) 및 빌드 검증 파이프라인 연동
+- `[ ]` [Task] IDE(IntelliJ) 환경에 SonarLint 도입 및 팀원 간 엄격한 정적 분석 룰셋(Rule Set) 통일
+- `[ ]` [Task] 로컬 개발 환경용 SonarQube(또는 SonarCloud) 서버 연동 및 정적 코드 분석/품질 게이트(Quality Gate) 자동화 설정
+- `[ ]` [Task] JDK Flight Recorder(JFR)를 활용한 로컬 개발 환경의 실시간 CPU/Memory/Thread 프로파일링 설정
+- `[ ]` [Task] 로컬 애플리케이션 실행 중 성능 병목을 실시간으로 확인하기 위한 JVM 모니터링 도구(Async-profiler, VisualVM, JProfiler 등) 도입 리서치 및 적용
+- `[ ]` [Task] Apache JMeter 또는 Gatling을 연동하여 로컬 환경에서 API 병목 및 부하 테스트 실시간 모니터링 환경 구축
+- `[ ]` [Task] JRebel 또는 DCEVM 같은 Hot-Swap 도구 리서치하여 코드 수정 즉시(Zero-restart) 반영되는 실시간 프로그래밍 환경 세팅
+
+---
+
 ## Epic 1. Highest Priority: Core Domain (AI-Driven BIM Work Graph Query System)
 
 ### [Story 1.1] IFC Data Ingestion & Graph Modeling
@@ -18,6 +32,8 @@
 ---
 
 ## Epic 2. High Priority: Core Feature Implementation (Data Seeding)
+
+### [Story 2.1] Mock Data Generation Pipeline
 - `[ ]` [Story] `BaselineDataSeeder`: Datafaker 객체를 활용해 Project, Task 등 초기 기본 설정 데이터 100건 생성 및 DB insert 로직 구현
 - `[ ]` [Story] `FieldDataSeeder`: 생성된 Baseline 데이터를 바탕으로 가상의 작업자, 건설장비, 작업 일지 데이터 무작위 생성 로직 구현
 - `[ ]` [Story] `ProgressDataSeeder`: Field 데이터를 기반으로 공정률(Progress Rate), 지연 상태(Delay) 등을 계산한 임시 데이터 생성
@@ -51,9 +67,9 @@
 - `[ ]` [Task] DTO 클래스는 `*Dto` 또는 `*Response`, `*Request`로 끝나야 한다는 ArchUnit 규칙 추가
 - `[ ]` [Task] Controller는 `*Controller` 또는 `*Api`로 끝나야 한다는 ArchUnit 규칙 추가
 - `[ ]` [Task] Domain Object(Entity, VO)는 Jpa 관련 어노테이션이나 Core 어노테이션 외의 Web/Service 레이어 의존성을 가지지 못하게 제한
-- `[x]` [Task] Define layer-specific structural constraints. (Applies to: DTO, Domain Object, Service, Repository, Controller) *(Completed via `LayerStructureTest`)*
-- `[x]` [Task] Restrict dependencies between Controller -> Service -> Repository -> Domain layers within each package. *(Completed via `LayerStructureTest` / `EncapsulationTest`)*
-- `[x]` [Task] Refactor all hardcoded string values to be programmable/dynamic constants. *(Completed via `PersistenceConstants` & DisplayName refactoring)*
+- `[x]` [Task] Define layer-specific structural constraints. (Applies to: DTO, Domain Object, Service, Repository, Controller) *(Completed)*
+- `[x]` [Task] Restrict dependencies between Controller -> Service -> Repository -> Domain layers within each package. *(Completed)*
+- `[x]` [Task] Refactor all hardcoded string values to be programmable/dynamic constants. *(Completed)*
 
 ### [Story 3.5] Architecture Review & Alignment
 - `[ ]` [Task] 모든 모듈(baseline, field, progress, valuation, insights)에 대해 동일한 계층 구조(Layer Structure)가 빠짐없이 일관되게 적용되었는지 크로스 체크 및 동기화
@@ -62,12 +78,14 @@
 ---
 
 ## Epic 4. Medium Priority: Test Infrastructure & Refactoring
+
+### [Story 4.1] Testing Environment Overhaul
 - `[ ]` [Task] 각 테스트 클래스마다 DB 상태를 롤백시키기 위한 `@Transactional` 또는 커스텀 `@AfterEach` truncate 쿼리 로직 작성 (Ensure test isolation)
 - `[ ]` [Task] 테스트 환경 구동 속도 최적화를 위해 `@SpringBootTest` 대신 슬라이스 테스트(`@DataJpaTest`, `@WebMvcTest`)로 전환 가능한 클래스들 식별 및 리팩토링
 - `[ ]` [Task] `TestEntityManager` 또는 전용 `Fixture` 클래스를 활용하여 반복되는 테스트 데이터 Setup/Teardown 코드를 공통 유틸리티로 추출
 - `[ ]` [Task] 비즈니스 로직 경계값(Boundary) 테스트를 위해 `@ParameterizedTest`와 `@CsvSource`/`@MethodSource`를 적용하여 반복 테스트 케이스 통합
 - `[ ]` [Task] 하드코딩된 `LocalDateTime.now()` 등을 `java.time.Clock` 빈으로 교체하여 테스트에서 시간을 Mocking할 수 있도록 제약(ArchUnit) 및 리팩토링
-- `[x]` [Task] Split file into multiple test classes for better organization and maintainability. *(Completed via `architecture/*Test` split)*
+- `[x]` [Task] Split file into multiple test classes for better organization and maintainability. *(Completed)*
 
 ---
 
@@ -86,6 +104,12 @@
 - `[ ]` [Task] Batch 전용 애플리케이션 진입점(`@EnableBatchProcessing`) 클래스 작성
 - `[ ]` [Task] 일일 공정률(Progress) 집계를 위한 첫 번째 Batch Job 및 Step(ItemReader, Processor, Writer) 구현
 
+### [Story 5.3] Database Monitoring & Health Checks (New)
+- `[ ]` [Task] Spring Boot Actuator (`spring-boot-starter-actuator`) 의존성 추가
+- `[ ]` [Task] `/actuator/health` 엔드포인트를 통한 단일 DB 인스턴스 Liveness/Readiness 헬스 체크 설정
+- `[ ]` [Task] HikariCP 커넥션 풀 메트릭스(Active, Idle, Total connections) 활성화 및 로깅 설정
+- `[ ]` [Task] 데이터베이스 병목 추적을 위한 Slow Query 로깅 활성화 및 알림 연동
+
 ---
 
 ## Epic 6. Lowest Priority: Code Quality & Conventions Enforcement
@@ -93,17 +117,11 @@
 ### [Story 6.1] Linting & Formatting
 - `[ ]` [Task] `build.gradle.kts`에 `com.diffplug.spotless` 플러그인 추가
 - `[ ]` [Task] Spotless 포맷팅 규칙(Google Java Format 등) 적용 및 `./gradlew spotlessApply` 파이프라인 구성
-- `[ ]` [Task] 팀원 간 동일한 IDE 검사 기준을 위해 SonarLint 플러그인 룰셋(Rule Set) 파일(`sonar-project.properties`) 루트 경로에 작성
 
-### [Story 6.2] SonarQube & JaCoCo (Test Coverage)
-- `[ ]` [Task] `build.gradle.kts`에 `jacoco` 플러그인 추가
-- `[ ]` [Task] JaCoCo 테스트 리포트 생성 태스크 및 커버리지 최소 기준(Threshold, 예: Line 80%, Branch 70%) 설정
-- `[ ]` [Task] SonarQube Scanner 플러그인 연동 및 `sonar.host.url`, `sonar.login` 환경변수 세팅 스크립트 작성
-
-### [Story 6.3] Coding Style Enforcement (ArchUnit)
-- `[x]` [Task] Enforce strict naming convention constraints across all components. *(Completed via `NamingConventionTest`)*
-- `[x]` [Task] Enforce naming conventions for test classes and methods. *(Completed via `NamingConventionTest`)*
-- `[x]` [Task] Enforce general Java coding style constraints. *(Completed via `NamingConventionTest`: no public fields, final utility classes)*
+### [Story 6.2] Coding Style Enforcement (ArchUnit)
+- `[x]` [Task] Enforce strict naming convention constraints across all components. *(Completed)*
+- `[x]` [Task] Enforce naming conventions for test classes and methods. *(Completed)*
+- `[x]` [Task] Enforce general Java coding style constraints. *(Completed)*
 - `[ ]` [Task] Add naming and return-type constraints for Spring Data JPA Repository methods.
 - `[ ]` [Task] Restrict the usage of specific external library functions.
 - `[ ]` [Task] Extract and apply useful advanced rules from the official ArchUnit documentation.
@@ -114,7 +132,6 @@
 
 ### [Story 7.1] CI/CD Pipeline
 - `[ ]` [Task] `.github/workflows/ci.yml` 생성 및 Java 버전에 맞는 Build & Test 자동화 Action 스크립트 작성
-- `[ ]` [Task] CI 파이프라인 내에 Spotless 검사, JaCoCo 리포트 업로드, SonarQube 분석 단계 추가
 - `[ ]` [Task] 성공적인 CI 빌드 후 Slack/Discord 등으로 테스트 결과를 전송하는 알림(Alerting) 스크립트 연동
 
 ### [Story 7.2] Error Handling & Logging
@@ -129,7 +146,7 @@
 - `[ ]` [Task] Prometheus 메트릭 수집을 위해 `spring-boot-starter-actuator` 추가 및 `/actuator/prometheus` 엔드포인트 오픈
 
 ### [Story 7.4] Modulith Event Fallback & Security
-- `[x]` [Task] Spring Modulith 이벤트를 활용한 모듈 간 통신(EDA) 보완 및 장애 격리(Fallback/DLQ) 로직 *(Partially Completed via `BaselineEventPublisher` & `BaselineEventListener`)*
+- `[x]` [Task] Spring Modulith 이벤트를 활용한 모듈 간 통신(EDA) 보완 및 장애 격리(Fallback/DLQ) 로직 *(Partially Completed)*
 - `[ ]` [Task] `.github/PULL_REQUEST_TEMPLATE.md` 및 `ISSUE_TEMPLATE.md` 템플릿 파일 생성
 - `[ ]` [Task] CI 파이프라인에 Mythos 또는 깃허브 Dependabot/CodeQL 연동하여 보안 취약점 스캔(SAST) 단계 추가
 
