@@ -1,6 +1,6 @@
 package com.coralstay.pathfinderspringbackend.baseline.service;
 
-import com.coralstay.pathfinderspringbackend.baseline.event.BaselineCreatedEvent;
+import com.coralstay.pathfinderspringbackend.baseline.events.BaselineCreatedEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

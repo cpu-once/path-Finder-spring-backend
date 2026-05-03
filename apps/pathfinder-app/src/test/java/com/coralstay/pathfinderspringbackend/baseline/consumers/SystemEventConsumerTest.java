@@ -1,4 +1,4 @@
-package com.coralstay.pathfinderspringbackend.baseline.listener;
+package com.coralstay.pathfinderspringbackend.baseline.consumers;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +14,12 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class SystemEventListenerTest {
+public class SystemEventConsumerTest {
 
-    private static final String DESC_SYSTEM_EVENT_LISTENER = "리스너: ApplicationReadyEvent가 정상적으로 수신되어야 한다";
+    private static final String DESC_SYSTEM_EVENT_CONSUMER = "컨슈머: ApplicationReadyEvent가 정상적으로 수신되어야 한다";
 
     @Autowired
-    private SystemEventListener systemEventListener;
+    private SystemEventConsumer systemEventConsumer;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -28,12 +28,10 @@ public class SystemEventListenerTest {
     private ConfigurableApplicationContext context;
 
     @Test
-    @DisplayName(DESC_SYSTEM_EVENT_LISTENER)
+    @DisplayName(DESC_SYSTEM_EVENT_CONSUMER)
     void receiveApplicationReadyEvent() {
-        // SystemEventListener가 스프링 컨텍스트에 정상 등록되어 있는지 확인
-        assertThat(systemEventListener).isNotNull();
+        assertThat(systemEventConsumer).isNotNull();
 
-        // ApplicationReadyEvent 발생 시 예외 없이 동작하는지 호출 테스트
         ApplicationReadyEvent event = new ApplicationReadyEvent(new SpringApplication(), new String[0], context, Duration.ofMillis(100));
         eventPublisher.publishEvent(event);
     }

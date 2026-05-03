@@ -3,13 +3,13 @@
 This file serves as the foundational mandate for all AI interactions within the `pathFinder-spring-backend` project. It provides the necessary context on architecture, tech stack, and development standards.
 
 ## Project Overview
-**PathFinder Spring Backend** is an AI-driven BIM (Building Information Modeling) work graph query system. It focuses on parsing IFC data, modeling construction work as a directed acyclic graph (DAG), and providing an LLM-integrated interface for querying project status and impact analysis.
+**PathFinder Spring Backend** is an AI-driven PMP (Project Management Professional) framework and BIM (Building Information Modeling) work graph query system. It focuses on parsing IFC data, modeling construction work as a directed acyclic graph (DAG), and providing an LLM-integrated interface for querying project status, tracking decisions, and performing impact analysis based on established PMP principles.
 
 ### Core Tech Stack
 - **Runtime:** Java 25 (utilizing compact headers, structured concurrency, etc.)
 - **Framework:** Spring Boot 4.0.5, Spring Modulith 2.0.5
 - **Build System:** Gradle (multi-project with typesafe accessors and version catalogs)
-- **Database:** Multi-datasource H2 (one instance per module)
+- **Database:** Multi-datasource H2 (one instance per module) -> Migrating to Single DB with Schema Separation
 - **Quality & Testing:** JUnit 5, ArchUnit 1.3.0, Spring REST Docs, JaCoCo, DataFaker
 - **Key Libraries:** Lombok, Spring AI (planned), IfcOpenShell (planned)
 
@@ -22,7 +22,7 @@ The application follows a strict modular monolith architecture with five primary
 `baseline` → `field` → `progress` → `valuation` → `insights`
 
 - **Communication:** Cross-module communication against the pipeline flow MUST use **Events** (`@ApplicationModuleListener`) to maintain loose coupling.
-- **Persistence:** Each module owns its own `DataSource`, `EntityManagerFactory`, and `TransactionManager`. Configuration is found in `<module>/infrastructure/<Module>PersistenceConfig.java`.
+- **Persistence:** Migrating to a single `DataSource` with logical schema separation per module.
 - **Constants:** Use `<Module>PersistenceConstants` for bean names and property prefixes to avoid hardcoding strings.
 
 ### Internal Layering (Per Module)

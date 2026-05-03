@@ -1,243 +1,352 @@
 # Project Backlog (Step-by-Step Task Breakdown)
 
-## Epic 0. Absolute Priority: Real-time Developer Experience (DevEx) & Continuous Profiling
+## Epic 1. Absolute Priority: Real-time Developer Experience (DevEx) & Continuous Profiling
 
-// TO-DO 제미나이, 클로드 코드 같이 사용시 스레드 락처럼 문맥을 나누는 방법 혹은 더 나은방법
-// TO-DO 제미나이나 클로드코드가 쉘 사용시 쉘체크를 하는 방법. 제미나이 훅?일거같음. 프롬프팅 도중에 이를 체크하고 쉘을 수정하는 방법 찾기
-// TO-DO 런타임,컴파일 타임 검증도구들 더 찾고, AI와 함께 코딩을한다면 어떤 지표들이 더 필요한가 검색하기.
-// TO-DO 스프링부트 실행시 테스트 통과하지않으면, 실행안되게. 그레이들 파이프라인 만들기.
-// TO-DO 각 스프링 모듈별로 스프링버전, 자바 버전 바꾸기
-// TO-DO 스프링 부트 버전 업데이트 대응,의존성 자동업데이트 도구 연동
-// TO-DO kisa 보안가이드라인 서류 추가.
-// TO-DO docs 포맷 정리 md로 통일하자! pdf->md vs 그냥 pdf 쓰기. 혹은 그냥 xml로 다 떨궈버리기
+### [Story 1.1] Real-time Quality & Performance Feedback Tools
 
-### [Story 0.1] Real-time Quality & Performance Feedback Tools
+**🎯 Goal: 테스트 커버리지 자동화 (JaCoCo)**
+- `[ ]` [Task] `gradle/libs.versions.toml`에 `jacoco` 플러그인 버전 정의 (예: 0.8.11)
+- `[ ]` [Task] 루트 `build.gradle.kts` (또는 `subprojects`)에 `jacoco` 플러그인 추가 (멀티 모듈 리포팅 취합 설정 포함)
+- `[ ]` [Task] 하위 모듈(`pathfinder-app`, `core-math`)의 `build.gradle.kts`에 `jacocoTestReport` task 설정 (XML/HTML 리포트 활성화)
+- `[ ]` [Task] `test` task 완료 후 `jacocoTestReport` 자동 실행되도록 설정 (`finalizedBy`)
+- `[ ]` [Task] 하위 모듈의 `build.gradle.kts`에 `jacocoTestCoverageVerification` task 설정 추가
+- `[ ]` [Task] `jacocoTestCoverageVerification` rule에서 INSTRUCTION, BRANCH 커버리지 minimum 1.0 (100%) 설정
+- `[ ]` [Task] `jacocoTestCoverageVerification`에서 DTO, Entity 등 테스트 제외 패키지(excludes) 설정
+- `[ ]` [Task] `check` task 수행 시 `jacocoTestCoverageVerification`이 실행되도록 의존성 설정
 
-- `[ ]` [Task] `build.gradle.kts`에 `jacoco` 플러그인 추가 및 테스트 실행 시 실시간 커버리지 측정 환경 구축
-- `[ ]` [Task] JaCoCo 테스트 커버리지 최소 기준(Threshold, 예: Line 80%, Branch 70%) 강제 설정 (100% 목표) 및 빌드 검증
-  파이프라인 연동
-- `[ ]` [Task] IDE(IntelliJ) 환경에 SonarLint 도입 및 팀원 간 엄격한 정적 분석 룰셋(Rule Set) 통일
-- `[ ]` [Task] 로컬 개발 환경용 SonarQube(또는 SonarCloud) 서버 연동 및 정적 코드 분석/품질 게이트(Quality Gate) 자동화 설정
-- `[ ]` [Task] JDK Flight Recorder(JFR)를 활용한 로컬 개발 환경의 실시간 CPU/Memory/Thread 프로파일링 설정
-- `[ ]` [Task] 로컬 애플리케이션 실행 중 성능 병목을 실시간으로 확인하기 위한 JVM 모니터링 도구(Async-profiler, VisualVM, JProfiler
-  등) 도입 리서치 및 적용
-- `[ ]` [Task] Apache JMeter 또는 Gatling을 연동하여 로컬 환경에서 API 병목 및 부하 테스트 실시간 모니터링 환경 구축
-- `[ ]` [Task] JRebel 또는 DCEVM 같은 Hot-Swap 도구 리서치하여 코드 수정 즉시(Zero-restart) 반영되는 실시간 프로그래밍 환경 세팅
+**🎯 Goal: 정적 분석 환경 구성 (SonarLint & SonarQube)**
+- `[ ]` [Task] `README.md` (또는 개발가이드)에 IntelliJ SonarLint 플러그인 설치 및 공통 Rule Set 연동 방법 문서화
+- `[ ]` [Task] 프로젝트 루트에 SonarLint 공통 룰셋(rule set) 설정 파일 생성 및 커밋
+- `[ ]` [Task] `docker-compose.yml` (로컬 개발용)에 SonarQube 서버 컨테이너 설정 추가
+- `[ ]` [Task] `build.gradle.kts`에 `org.sonarqube` 플러그인 추가
+- `[ ]` [Task] `build.gradle.kts`에 `sonar` property 설정 (host.url, projectKey 등)
+- `[ ]` [Task] 로컬 SonarQube 서버 실행 후 Quality Gate 최소 커버리지 조건 100% 설정 스크립트 작성
 
-### [Story 0.2] Advanced Runtime Observability & Control
+**🎯 Goal: 실시간 프로파일링 및 부하 테스트 환경**
+- `[ ]` [Task] JVM 옵션으로 JFR(Java Flight Recorder) 활성화 스크립트(또는 IntelliJ Run Configuration 템플릿) 작성
+- `[ ]` [Task] JFR 기록을 덤프(dump)하는 로컬 개발용 쉘 스크립트(JCMD 활용) 작성
+- `[ ]` [Task] Async-profiler 다운로드 및 로컬 실행을 위한 쉘 스크립트 작성 (CPU/Allocation 프로파일링)
+- `[ ]` [Task] Apache JMeter용 기본 부하 테스트 JMX 스크립트 템플릿(단순 API 호출) 작성
+- `[ ]` [Task] Spring Boot 3.2+ 의 `spring-boot-devtools`를 `build.gradle.kts`에 추가하여 클래스 리로딩(Hot-Swap) 설정
 
-- `[ ]` [Task] **Heap Dump & Runtime Snapshot:** 런타임 중 특정 조건(OOM 전조, 특정 이벤트) 발생 시 자동으로 Heap Dump를
-  생성하고 관리하는 유틸리티 구현
-- `[ ]` [Task] **Dynamic Log Level Management:** Spring Actuator 또는 커스텀 엔드포인트를 통해 서버 재시작 없이 실시간으로
-  Logging Level(INFO -> DEBUG)을 조정하는 기능 구현
-- `[ ]` [Task] **Quota-aware Execution Control:** AI API(Gemini 등)의 Quota 상태를 모니터링하여,
-  `Resource Exhausted` 발생 시 작업을 일시 중지하거나(Pause) 속도를 조절하는(Throttling) 제어 로직 구현
+### [Story 1.2] Multi-AI Collaboration Workflow
 
----
+**🎯 Goal: AI 에이전트 동시성 제어 및 쉘 제어 훅**
+- `[ ]` [Task] 다중 AI 에이전트 동시 사용 시 컨텍스트 충돌 방지를 위한 디렉토리/모듈 단위 `.agent-lock` 파일 생성 및 검증 쉘 스크립트 작성
+- `[ ]` [Task] AI가 터미널 명령어 실행 전 구문을 검증(ShellCheck 호출 등)하는 프롬프팅 훅(Hook) 시스템 가이드라인 문서 작성
 
-## Epic 1. Highest Priority: Core Domain (AI-Driven BIM Work Graph Query System)
+### [Story 1.3] Advanced Runtime Observability & Control
 
-### [Story 1.1] IFC Data Ingestion & Graph Modeling
-
-- `[ ]` [Task] IFC 파싱을 위한 Java 라이브러리(IfcOpenShell 등) 리서치 및 `build.gradle.kts` 추가
-- `[ ]` [Task] `IfcWall`, `IfcSlab` 등 개별 객체들을 파싱하여 공종(Trade) 또는 작업 단위(Task)로 묶는 `WorkGroup` Entity
-  설계
-- `[ ]` [Task] 그룹핑된 IFC 객체 군단 간의 선행/후행 작업 의존성을 나타내는 작업 그래프(DAG) 구조를 Java Class로 모델링
-
-### [Story 1.2] LLM Context Preparation & Serialization
-
-- `[ ]` [Task] 메모리에 구축된 작업 그래프 객체(Java Class)들을 AI가 구조적으로 이해하기 쉬운 형태(JSON, YAML, 또는 Graph 형태의 문자열)로
-  직렬화(Serialize)하는 유틸리티 구현
-- `[ ]` [Task] 직렬화된 데이터와 함께 "이 공종이 지연되면 크리티컬 패스(Critical Path)는 어떻게 바뀌어?", "이 작업에 할당된 벽체들의 총 체적은
-  얼마야?" 등을 묻기 위한 프롬프트 템플릿(Prompt Template) 설계
-
-### [Story 1.3] AI Query Integration (Spring AI / LangChain)
-
-- `[ ]` [Task] `build.gradle.kts`에 `spring-ai` (또는 `langchain4j`) 의존성을 추가하여 OpenAI/Claude API 연동 설정
-- `[ ]` [Task] 프론트엔드에서 자연어 질의를 받아, 백엔드에서 객체 그래프 컨텍스트(Context)를 RAG 방식으로 주입한 후 AI에게 질의하고 답변을 반환하는
-  REST API 컨트롤러 구현
+**🎯 Goal: 런타임 제어 및 외부 API 장애 대비**
+- `[ ]` [Task] `-XX:+HeapDumpOnOutOfMemoryError` 등 JVM 옵션을 추가하여 OOM 발생 시 자동 힙 덤프 설정
+- `[ ]` [Task] `build.gradle.kts`에 Spring Boot Actuator 의존성 추가
+- `[ ]` [Task] `application.yml`에 `/actuator/loggers` 엔드포인트 활성화 설정 추가 (실시간 로그 레벨 변경용)
+- `[ ]` [Task] AI API(Gemini 등) 호출 실패(Quota 초과 등 429 에러) 시 재시도 간격을 백오프(Backoff) 방식으로 조절하는 커스텀 `RetryTemplate` 또는 Resilience4j 로직 구현
 
 ---
 
-## Epic 2. High Priority: Core Feature Implementation (Data Seeding)
+## Epic 2. Highest Priority: Core Domain (AI-Driven BIM Work Graph Query System)
 
-### [Story 2.1] Mock Data Generation Pipeline
+### [Story 2.1] Database Integration & Docker Local Environment (Highest)
 
-- `[ ]` [Story] `BaselineDataSeeder`: Datafaker 객체를 활용해 Project, Task 등 초기 기본 설정 데이터 100건 생성 및 DB
-  insert 로직 구현
-- `[ ]` [Story] `FieldDataSeeder`: 생성된 Baseline 데이터를 바탕으로 가상의 작업자, 건설장비, 작업 일지 데이터 무작위 생성 로직 구현
-- `[ ]` [Story] `ProgressDataSeeder`: Field 데이터를 기반으로 공정률(Progress Rate), 지연 상태(Delay) 등을 계산한 임시 데이터
-  생성
-- `[ ]` [Task] 위 3개의 Seeder가 올바른 순서(Baseline -> Field -> Progress)로 실행되도록 ApplicationRunner 등록
+**🎯 Goal: 단일 DataSource(H2/PostgreSQL) 통합 및 로컬 도커 환경 구축**
+- `[ ]` [Task] `application.yml`에서 기존 5개 모듈별 DB 설정 모두 제거
+- `[ ]` [Task] `application.yml`에 통합 단일 DB(H2 또는 PostgreSQL) 접속 정보(`spring.datasource.*`) 추가
+- `[ ]` [Task] 각 모듈(`baseline`, `field`, `progress`, `valuation`, `insights`)의 `infrastructure` 내 개별 DataSource/TransactionManager 등록 빈(Bean) 일괄 제거
+- `[ ]` [Task] 단일 `DataSource`를 사용하는 전역 `JpaConfig` 클래스 생성 (Spring Boot AutoConfiguration 활용 시 생략 가능 여부 확인)
+- `[ ]` [Task] 로컬 개발용 단일 DB 컨테이너 실행을 위한 `docker-compose.yml` 작성
+- `[ ]` [Task] `build.gradle.kts`에 `spring-boot-docker-compose` 의존성 추가 (앱 실행 시 도커 자동 기동)
 
----
+### [Story 2.2] Database Migration (Flyway/Liquibase)
 
-## Epic 3. Medium Priority: Infrastructure & Architecture Setup
+**🎯 Goal: Flyway 마이그레이션 적용 및 스키마 초기화**
+- `[ ]` [Task] `gradle/libs.versions.toml`에 `flyway-core` 의존성 정의 및 `build.gradle.kts` 추가
+- `[ ]` [Task] `application.yml`에 `spring.flyway.enabled=true` 및 기본 설정 추가
+- `[ ]` [Task] 각 모듈의 Entity 클래스 상단 `@Table(schema = "모듈명")` 어노테이션 일괄 추가하여 논리적 분리 보장
+- `[ ]` [Task] `src/main/resources/db/migration` 하위에 `V1__init_baseline_schema.sql` 작성 (Project, Task 테이블 생성 DDL)
+- `[ ]` [Task] `src/main/resources/db/migration` 하위에 `V2__init_field_schema.sql` 작성 (Worker, Equipment 테이블 생성 DDL)
+- `[ ]` [Task] `src/main/resources/db/migration` 하위에 `V3__init_progress_schema.sql` 작성 (Progress 테이블 생성 DDL)
 
-### [Story 3.1] Database & Schema Integration
+### [Story 2.3] API Documentation & Error Handling Foundation
 
-- `[ ]` [Task] `application.yaml`의 5개 다중 데이터소스 설정을 단일 데이터소스(e.g., PostgreSQL/H2)로 통합
-- `[ ]` [Task] 통합된 단일 DB 연결을 사용하는 공통 `DataSource` 빈(Bean) 생성
-- `[ ]` [Task] 각 모듈의 `PersistenceConfig` 파일에서 다중 DB 설정 제거 및 공통 `DataSource` 주입받도록 수정
-- `[ ]` [Task] 각 모듈 Entity 패키지에 `@Table(schema = "모듈명")` 지정하여 물리적 DB 대신 논리적 스키마(Schema)로 데이터 분리 강제
+**🎯 Goal: REST Docs와 Swagger의 결합 (restdocs-api-spec)**
+- `[ ]` [Task] `build.gradle.kts`에 `com.epages.restdocs-api-spec` 플러그인 및 의존성 추가
+- `[ ]` [Task] `build.gradle.kts`에 `openapi3` Task를 설정하여, REST Docs 테스트 성공 시 OpenAPI 3.0 스펙(JSON) 자동 생성 파이프라인 구축
+- `[ ]` [Task] `build.gradle.kts`에 `springdoc-openapi-starter-webmvc-ui` (Swagger UI) 의존성 추가
+- `[ ]` [Task] 생성된 OpenAPI 스펙 파일(JSON)을 Swagger UI 경로로 서빙할 수 있도록 `application.yml` 설정 및 커스텀 WebMvc Config 작성
+- `[ ]` [Task] 컨트롤러 테스트 작성 시, `MockMvcRestDocumentation` 대신 `MockMvcRestDocumentationWrapper`를 사용하도록 팀 가이드라인 주석 작성
 
-### [Story 3.2] Database Migration (Flyway/Liquibase)
+**🎯 Goal: 전역 예외 처리(ProblemDetail) 뼈대**
+- `[ ]` [Task] 전역 예외 처리를 위한 `GlobalExceptionHandler` 클래스 생성 및 `@RestControllerAdvice` 부착
+- `[ ]` [Task] 커스텀 `BusinessException` 및 `MethodArgumentNotValidException`을 캐치하여 Spring 3 `ProblemDetail` 객체로 변환 반환하는 메서드 작성
 
-- `[ ]` [Task] `build.gradle.kts`에 Flyway(또는 Liquibase) 의존성 추가
-- `[ ]` [Task] 각 모듈 스키마(baseline, field 등) 생성을 위한 V1 초기 마이그레이션 스크립트 작성
-- `[ ]` [Task] Spring Boot 구동 시 Flyway가 각 모듈 스키마별로 마이그레이션을 실행하도록 환경 설정
+### [Story 2.4] IFC Data Ingestion & Graph Modeling
 
-### [Story 3.3] Spring Security & Auth (JWT/OAuth2)
+**🎯 Goal: IFC 파싱 라이브러리 연동**
+- `[ ]` [Task] `gradle/libs.versions.toml`에 IFC 파싱 라이브러리(IfcOpenShell-Java 등) 버전 정의
+- `[ ]` [Task] `build.gradle.kts`의 dependencies에 IFC 파싱 라이브러리 추가
 
-- `[ ]` [Task] `build.gradle.kts`에 `spring-boot-starter-security`, `jjwt` 의존성 추가
-- `[ ]` [Task] `SecurityConfig.java` 생성 및 세션 상태 Stateless(무상태)로 설정
-- `[ ]` [Task] 로그인/회원가입 처리용 AuthController 및 AuthService 뼈대 작성
-- `[ ]` [Task] JWT 발급(Access/Refresh) 및 서명 검증 유틸리티 클래스 구현
-- `[ ]` [Task] HTTP Request에서 JWT를 추출하고 검증하는 커스텀 `JwtAuthenticationFilter` 구현 및 Security 필터 체인에 등록
-- `[ ]` [Task] 사용자 권한(Role)별 API 접근 제어 규칙 설정
+**🎯 Goal: 파싱 서비스 및 업로드 API 구현**
+- `[ ]` [Task] IFC 파싱을 수행하는 `IfcParserService` 인터페이스 생성
+- `[ ]` [Task] `IfcParserService` 구현체 클래스 생성 및 `@Service` 등록
+- `[ ]` [Task] 파일 업로드(MultipartFile)로 IFC 파일을 받아 파싱 서비스에 전달하는 `IfcUploadController` 생성
 
-### [Story 3.4] Architectural Constraints Enforcement (ArchUnit)
+**🎯 Goal: 그래프 데이터 엔티티(WorkGroup/WorkDependency) 모델링**
+- `[ ]` [Task] 공종(Trade) 또는 작업 단위(Task)를 의미하는 `WorkGroup` 엔티티 클래스 생성 및 JPA 어노테이션 추가
+- `[ ]` [Task] `WorkGroup` 엔티티 내에 소속된 IFC 객체 ID 목록을 저장하는 `List<String> elements` 필드 추가
+- `[ ]` [Task] IFC 파싱 결과를 바탕으로 `WorkGroup` 엔티티를 생성하고 DB에 저장하는 `WorkGroupRepository` 로직 작성
+- `[ ]` [Task] `WorkGroup` 간 선행/후행 관계를 나타내는 `WorkDependency` 엔티티 생성 (선행 ID, 후행 ID 포함)
+- `[ ]` [Task] `WorkDependency` 엔티티 리스트를 기반으로 메모리상에 DAG(Directed Acyclic Graph)를 구성하는 `WorkGraph` 자료구조 클래스 구현
+- `[ ]` [Task] `WorkGraph` 객체 생성 시 순환 참조(Cycle) 발생 여부를 검증하는 로직 추가
 
-- `[ ]` [Task] Spring Boot Starter BOM 버전을 파싱하여 모든 의존성이 동일한 BOM 버전을 따르는지 검증하는 ArchUnit 테스트 작성
-- `[ ]` [Task] DTO 클래스는 `*Dto` 또는 `*Response`, `*Request`로 끝나야 한다는 ArchUnit 규칙 추가
-- `[ ]` [Task] Controller는 `*Controller` 또는 `*Api`로 끝나야 한다는 ArchUnit 규칙 추가
-- `[ ]` [Task] Domain Object(Entity, VO)는 Jpa 관련 어노테이션이나 Core 어노테이션 외의 Web/Service 레이어 의존성을 가지지 못하게
-  제한
-- `[x]` [Task] Define layer-specific structural constraints. (Applies to: DTO, Domain Object,
-  Service, Repository, Controller) *(Completed)*
-- `[ ]` [Task] Restrict dependencies between Controller -> Service -> Repository -> Domain layers
-  within 각 package.
-- `[x]` [Task] Refactor all hardcoded string values to be programmable/dynamic constants. *(
-  Completed)*
+### [Story 2.5] LLM Context Preparation & Serialization
 
-### [Story 3.5] Architecture Review & Alignment
+**🎯 Goal: 그래프 모델의 AI 프롬프트용 직렬화**
+- `[ ]` [Task] AI에게 전달할 경량화된 `WorkGroupDto`, `WorkDependencyDto` 생성
+- `[ ]` [Task] `WorkGraph` 객체를 JSON 문자열로 변환하는 `GraphSerializer` 컴포넌트(Jackson ObjectMapper 활용) 구현
+- `[ ]` [Task] AI가 이해하기 쉬운 텍스트 기반 Markdown 형태로 그래프 구조를 직렬화하는 포맷터 메서드 구현
+- `[ ]` [Task] 직렬화된 텍스트의 Token 길이를 계산하는 유틸리티(예: JTokkit 사용) 구현 및 제한 초과 시 예외 처리 로직 추가
 
-- `[ ]` [Task] 모든 모듈(baseline, field, progress, valuation, insights)에 대해 동일한 계층 구조(Layer Structure)가
-  빠짐없이 일관되게 적용되었는지 크로스 체크 및 동기화
-- `[ ]` [Task] `event`와 `listener`를 별도의 패키지/계층으로 나누는 현재의 방식이 사람이 읽기 편한(유지보수성) 구조인지, 아니면 AI가 코드를 분석하고
-  컨텍스트를 파악하기 편한 구조인지 아키텍처 관점에서 재평가(Review)
+**🎯 Goal: 프롬프트 템플릿 및 상수 설계**
+- `[ ]` [Task] AI에게 역할을 부여하는 System Prompt 텍스트 상수 클래스(`PromptConstants`) 생성
+- `[ ]` [Task] 사용자 질의와 직렬화된 그래프 컨텍스트 문자열을 결합하는 프롬프트 템플릿(String 템플릿 또는 Spring AI `PromptTemplate`) 로직 구현
 
----
+### [Story 2.6] AI Query Integration (Spring AI / LangChain)
 
-## Epic 4. Medium Priority: Test Infrastructure & Refactoring
+**🎯 Goal: Spring AI 연동 설정**
+- `[ ]` [Task] `gradle/libs.versions.toml`에 `spring-ai-openai-spring-boot-starter` (또는 Anthropic/Gemini) 버전 정의
+- `[ ]` [Task] `build.gradle.kts`에 Spring AI starter 의존성 추가
+- `[ ]` [Task] `application.yml`에 AI 관련 API Key(환경변수 처리 `${AI_API_KEY}`) 및 모델명 설정 추가
 
-### [Story 4.1] Testing Environment Overhaul
-
-- `[ ]` [Task] 각 테스트 클래스마다 DB 상태를 롤백시키기 위한 `@Transactional` 또는 커스텀 `@AfterEach` truncate 쿼리 로직 작성 (
-  Ensure test isolation)
-- `[ ]` [Task] 테스트 환경 구동 속도 최적화를 위해 `@SpringBootTest` 대신 슬라이스 테스트(`@DataJpaTest`, `@WebMvcTest`)로 전환
-  가능한 클래스들 식별 및 리팩토링
-- `[ ]` [Task] `TestEntityManager` 또는 전용 `Fixture` 클래스를 활용하여 반복되는 테스트 데이터 Setup/Teardown 코드를 공통
-  유틸리티로 추출
-- `[ ]` [Task] 비즈니스 로직 경계값(Boundary) 테스트를 위해 `@ParameterizedTest`와 `@CsvSource`/`@MethodSource`를
-  적용하여 반복 테스트 케이스 통합
-- `[ ]` [Task] 하드코딩된 `LocalDateTime.now()` 등을 `java.time.Clock` 빈으로 교체하여 테스트에서 시간을 Mocking할 수 있도록
-  제약(ArchUnit) 및 리팩토링
-- `[x]` [Task] Split file into multiple test classes for better organization and maintainability. *(
-  Completed)*
-
----
-
-## Epic 5. Low Priority: Performance & Scalability
-
-### [Story 5.1] Redis Integration & Global Caching
-
-- `[ ]` [Task] `build.gradle.kts`에 `spring-boot-starter-data-redis` 의존성 추가
-- `[ ]` [Task] `RedisConfig.java` 작성 (RedisConnectionFactory, RedisTemplate 빈 등록 및 직렬화 설정)
-- `[ ]` [Task] `CacheConfig.java` 작성 (RedisCacheManager 세팅 및 TTL 설정)
-- `[ ]` [Task] JWT Refresh Token을 Redis에 저장/조회하는 Repository 로직 구현
-- `[ ]` [Task] Insights 모듈 등 조회 빈도가 높은 API 서비스 메서드에 `@Cacheable`, `@CacheEvict` 어노테이션 적용
-
-### [Story 5.2] Spring Batch Setup
-
-- `[ ]` [Task] 루트 디렉터리에 `apps/pathfinder-batch` 신규 멀티 모듈 디렉토리 생성 및 `build.gradle.kts` 설정
-- `[ ]` [Task] 루트 `settings.gradle.kts`에 `:apps:pathfinder-batch` 등록
-- `[ ]` [Task] Batch 전용 애플리케이션 진입점(`@EnableBatchProcessing`) 클래스 작성
-- `[ ]` [Task] 일일 공정률(Progress) 집계를 위한 첫 번째 Batch Job 및 Step(ItemReader, Processor, Writer) 구현
-
-### [Story 5.3] Database Monitoring & Health Checks (New)
-
-- `[ ]` [Task] Spring Boot Actuator (`spring-boot-starter-actuator`) 의존성 추가
-- `[ ]` [Task] `/actuator/health` 엔드포인트를 통한 단일 DB 인스턴스 Liveness/Readiness 헬스 체크 설정
-- `[ ]` [Task] HikariCP 커넥션 풀 메트릭스(Active, Idle, Total connections) 활성화 및 로깅 설정
-- `[ ]` [Task] 데이터베이스 병목 추적을 위한 Slow Query 로깅 활성화 및 알림 연동
+**🎯 Goal: RAG 기반 AI 질의 파이프라인(Controller/Service) 구현**
+- `[ ]` [Task] 프론트엔드로부터 사용자 질의를 받는 `AiQueryRequest` DTO 생성
+- `[ ]` [Task] AI의 응답 텍스트를 담을 `AiQueryResponse` DTO 생성
+- `[ ]` [Task] `AiQueryRequest`를 받아 처리하는 `AiQueryController` REST API 엔드포인트 생성
+- `[ ]` [Task] `AiQueryController`에서 호출할 `AiQueryService` 인터페이스 및 구현체 생성
+- `[ ]` [Task] `AiQueryService` 내에서 `ChatClient` 빈을 주입받아 LLM API 호출 및 프롬프트 전달 로직 작성
+- `[ ]` [Task] API 호출 실패(Timeout, Quota 초과 등) 시 적절한 Fallback 에러 메시지를 반환하는 예외 처리(`try-catch` 또는 `@Recover`) 구현
 
 ---
 
-## Epic 6. Lowest Priority: Code Quality & Conventions Enforcement
+## Epic 3. High Priority: Core Feature Implementation (Data Seeding & Universal WAL)
 
-### [Story 6.1] Linting & Formatting
+### [Story 3.1] Universal WAL (Write-Ahead Logging) & Decision Record Foundation
 
-- `[ ]` [Task] `build.gradle.kts`에 `com.diffplug.spotless` 플러그인 추가
-- `[ ]` [Task] Spotless 포맷팅 규칙(Google Java Format 등) 적용 및 `./gradlew spotlessApply` 파이프라인 구성
+**🎯 Goal: 전 모듈 불변 WAL(Write-Ahead Logging) 및 의사결정 추적 시스템 구축**
+- `[ ]` [Task] 모든 모듈의 데이터 변경 및 이벤트를 수정/삭제 불가한 불변(Immutable) 로그로 기록하는 전역 WAL(Write-Ahead Logging) 인터페이스/엔티티 설계
+- `[ ]` [Task] Spring Modulith 이벤트 리스너를 활용하여 각 모듈(baseline, field, progress, valuation)에서 발생하는 도메인 이벤트를 WAL 스키마에 자동 적재하는 공통 로직 구현
+- `[ ]` [Task] 의사결정의 근거, 내용, 예상 결과를 기록하는 `DecisionRecord` 엔티티 설계 (`insights` 모듈)
+- `[ ]` [Task] 특정 의사결정 시점의 WorkGraph 컨텍스트와 WAL 상태를 묶어 스냅샷으로 기록(Audit Trail)하는 로직 구현
 
-### [Story 6.2] Coding Style Enforcement (ArchUnit)
+### [Story 3.2] Mock Data Generation Pipeline
 
-- `[x]` [Task] Enforce strict naming convention constraints across all components. *(Completed)*
-- `[x]` [Task] Enforce naming conventions for test classes and methods. *(Completed)*
-- `[x]` [Task] Enforce general Java coding style constraints. *(Completed)*
-- `[ ]` [Task] Add naming and return-type constraints for Spring Data JPA Repository methods.
-- `[ ]` [Task] Restrict the usage of specific external library functions.
-- `[ ]` [Task] Extract and apply useful advanced rules from the official ArchUnit documentation.
+**🎯 Goal: Mock 데이터 생성 기반 설정**
+- `[ ]` [Task] `build.gradle.kts`에 `net.datafaker:datafaker` 의존성 추가
+- `[ ]` [Task] `application.yml`에 Seeder 실행 여부를 제어하는 `seed.enabled=true` 프로퍼티 추가
 
----
-
-## Epic 7. Lowest Priority: CI/CD, Telemetry & Security
-
-### [Story 7.1] CI/CD Pipeline
-
-- `[ ]` [Task] `.github/workflows/ci.yml` 생성 및 Java 버전에 맞는 Build & Test 자동화 Action 스크립트 작성
-- `[ ]` [Task] 성공적인 CI 빌드 후 Slack/Discord 등으로 테스트 결과를 전송하는 알림(Alerting) 스크립트 연동
-
-### [Story 7.2] Error Handling & Logging
-
-- `[ ]` [Task] 전역 예외 처리를 위한 `@RestControllerAdvice` 클래스 생성
-- `[ ]` [Task] Spring 3+ 표준인 ProblemDetail(RFC 7807) 객체를 반환하도록 커스텀 Exception Handler 메서드 구현
-- `[ ]` [Task] `src/main/resources/logback-spring.xml` 생성 및 콘솔/파일 로깅 패턴 포맷 표준화
-- `[ ]` [Task] API 요청마다 고유한 Trace ID(traceId, spanId)를 부여하도록 MDC(Mapped Diagnostic Context) 필터 구현
-
-### [Story 7.3] Telemetry & Distributed Tracing
-
-- `[ ]` [Task] `micrometer-tracing-bridge-brave` 및 `zipkin-reporter-brave` 의존성 추가
-- `[ ]` [Task] `application.yaml`에 Zipkin 서버 연동 설정 및 샘플링 확률(Sampling Rate) 지정
-- `[ ]` [Task] Prometheus 메트릭 수집을 위해 `spring-boot-starter-actuator` 추가 및 `/actuator/prometheus`
-  엔드포인트 오픈
-
-### [Story 7.4] Modulith Event Fallback & Security
-
-- `[x]` [Task] Spring Modulith 이벤트를 활용한 모듈 간 통신(EDA) 보완 및 장애 격리(Fallback/DLQ) 로직 *(Partially
-  Completed)*
-- `[ ]` [Task] `.github/PULL_REQUEST_TEMPLATE.md` 및 `ISSUE_TEMPLATE.md` 템플릿 파일 생성
-- `[ ]` [Task] CI 파이프라인에 Mythos 또는 깃허브 Dependabot/CodeQL 연동하여 보안 취약점 스캔(SAST) 단계 추가
-
-### [Story 7.5] Human Inspection & Quality Gate
-
-- `[ ]` [Task] 자동화된 아키텍처 테스트(ArchUnit) 및 CI/CD 파이프라인을 통과하더라도, 반드시 사람(전문가)이 개입하여 코드의 도메인 의미와 구조적 합리성을
-  직접 인스펙션(Manual Code Review)하는 단계 공식화
+**🎯 Goal: Baseline / Field / Progress 순차 데이터 생성 로직**
+- `[ ]` [Task] Baseline 모듈에 `BaselineDataSeeder` 컴포넌트 생성 및 `ApplicationRunner` 인터페이스 구현
+- `[ ]` [Task] `BaselineDataSeeder` 내 Datafaker를 활용한 가상의 `Project` 엔티티 100건 생성 및 저장 로직 구현
+- `[ ]` [Task] `BaselineDataSeeder` 내 가상의 `Task` 엔티티 무작위 생성 로직 구현
+- `[ ]` [Task] Field 모듈에 `FieldDataSeeder` 컴포넌트 생성 및 `@Order(2)` 지정
+- `[ ]` [Task] `FieldDataSeeder` 내 가상의 `Worker`(작업자), `Equipment`(장비) 데이터 무작위 생성 로직 구현
+- `[ ]` [Task] `FieldDataSeeder` 내 일별 작업 일지(`DailyLog`) 데이터 무작위 생성 로직 구현
+- `[ ]` [Task] Progress 모듈에 `ProgressDataSeeder` 컴포넌트 생성 및 `@Order(3)` 지정
+- `[ ]` [Task] `ProgressDataSeeder` 내 일일 공정률(Progress Rate) 무작위 계산 로직 구현
+- `[ ]` [Task] `ProgressDataSeeder` 내 작업 지연(Delay) 발생 여부를 무작위로 생성 및 저장하는 로직 구현
 
 ---
 
-## Epic 8. Cloud Infrastructure & MSA Deployment (AWS)
+## Epic 4. Medium Priority: Infrastructure & Architecture Setup
 
-### [Story 8.1] Containerization & Artifact Registry
+### [Story 4.1] Spring Security & Auth (JWT/OAuth2)
 
-- `[ ]` [Task] Spring Boot 애플리케이션의 최적화된 Docker 이미지 생성을 위한 Multi-stage `Dockerfile` (또는 Cloud Native
-  Buildpacks) 작성
-- `[ ]` [Task] GitHub Actions에 AWS ECR (Elastic Container Registry) 빌드 및 푸시 자동화 파이프라인 구축
+**🎯 Goal: Spring Security 및 JWT 인증 기반 구축**
+- `[ ]` [Task] `build.gradle.kts`에 `spring-boot-starter-security`, `jjwt-api`, `jjwt-impl`, `jjwt-jackson` 추가
+- `[ ]` [Task] `SecurityConfig` 클래스 생성, `@EnableWebSecurity` 적용 및 `SessionCreationPolicy.STATELESS` 설정 추가
+- `[ ]` [Task] `SecurityConfig` 내 CORS 설정 빈(`CorsConfigurationSource`)을 추가하여 프론트엔드 연동 지원
+- `[ ]` [Task] `SecurityConfig` 내 `SecurityFilterChain` Bean 등록 (허용할 URI와 인증 필요 URI 분리)
+- `[ ]` [Task] `AuthController` 생성 및 로그인(Login), 회원가입(Signup) 메서드 뼈대 작성
+- `[ ]` [Task] JWT 토큰을 생성(sign)하고 검증(verify)하는 `JwtProvider` 유틸리티 클래스 구현
 
-### [Story 8.2] Infrastructure as Code (IaC)
+**🎯 Goal: 필터 및 인가(Authorization) 로직 적용**
+- `[ ]` [Task] Request Header에서 `Bearer` 토큰을 추출하는 `JwtAuthenticationFilter` 클래스(`OncePerRequestFilter` 상속) 작성
+- `[ ]` [Task] `JwtAuthenticationFilter`를 `SecurityConfig`의 필터 체인에 추가
+- `[ ]` [Task] `UserDetailsService` 인터페이스를 구현하는 커스텀 `CustomUserDetailsService` 클래스 작성
+- `[ ]` [Task] 특정 엔드포인트에 `@PreAuthorize("hasRole('ADMIN')")` 어노테이션을 적용하고 테스트 코드 작성
 
-- `[ ]` [Task] AWS CloudFormation (또는 Terraform)을 사용하여 VPC, Subnet, Security Group 등 기본 네트워크 인프라 코드화
-- `[ ]` [Task] 데이터베이스(RDS/Aurora PostgreSQL) 및 ElastiCache(Redis) 프로비저닝 스크립트 작성
-- `[ ]` [Task] 애플리케이션 구동을 위한 AWS ECS(Fargate) 또는 EKS 클러스터 프로비저닝 스크립트 작성
+### [Story 4.2] Architectural Constraints Enforcement (ArchUnit)
 
-### [Story 8.3] Secret Management
+**🎯 Goal: 외부 의존성 및 네이밍 룰 검증 (ArchUnit)**
+- `[ ]` [Task] `build.gradle.kts` 내 Spring Boot 의존성 BOM 버전을 가져오는 스크립트 작성 (버전 검증용)
+- `[ ]` [Task] ArchUnit을 사용해 모든 외부 라이브러리 버전이 BOM과 일치하는지 검사하는 테스트 클래스 작성
+- `[ ]` [Task] DTO 패키지 내 클래스명이 `Dto`, `Request`, `Response`로 끝나는지 검사하는 ArchUnit 룰 작성
+- `[ ]` [Task] Controller 클래스명이 `Controller` 또는 `Api`로 끝나는지 검사하는 ArchUnit 룰 작성
+- `[ ]` [Task] Entity 클래스가 웹/서비스 계층 어노테이션을 가지지 않도록 검증하는 룰 작성
 
-- `[ ]` [Task] `application.yaml`의 민감 정보(DB 패스워드, JWT 시크릿, API Key 등)를 AWS Secrets Manager 또는
-  Parameter Store로 이관 및 연동
+**🎯 Goal: 계층 간 의존성 및 코딩 컨벤션 검증**
+- `[x]` [Task] Define layer-specific structural constraints. (Completed)
+- `[x]` [Task] Restrict dependencies between layers. (Completed)
+- `[x]` [Task] Refactor hardcoded strings to constants. (Completed)
 
-### [Story 8.4] Fatal Alerting & Incident Response (Server Crash)
+### [Story 4.3] Architecture Review & Alignment
 
-- `[ ]` [Task] AWS CloudWatch 연동하여 ECS/EKS 컨테이너의 CPU/Memory 임계치 초과 및 OOM(Out Of Memory) 모니터링 대시보드 구축
-- `[ ]` [Task] 서버 애플리케이션 다운(Crash), 재시작 루프(CrashLoopBackOff), 또는 5xx 에러율 급증 시 AWS SNS + AWS Chatbot을
-  활용해 사내 Slack/Discord 채널로 PagerDuty(긴급 알림) 발송 로직 구현
+**🎯 Goal: 모듈 간 아키텍처 일관성 및 이벤트 분리 리뷰**
+- `[ ]` [Task] 모든 모듈(baseline, field 등) 하위에 패키지 구조가 동일한지 검증하는 ArchUnit 룰 추가
+- `[ ]` [Task] 각 모듈의 `package-info.java` 파일에 Spring Modulith `@ApplicationModule` 검증 테스트 작성
+- `[ ]` [Task] 모듈 간 통신용 `event` 패키지 분리 및 외부 노출 제한(package-private) 룰 작성
+- `[ ]` [Task] 모듈 간 통신이 무조건 이벤트(`ApplicationEventPublisher`)를 통해 일어나도록(타 모듈의 Service 빈 직접 주입 금지) 강제하는 ArchUnit 테스트 룰 작성
+
+### [Story 4.4] Multi-Environment Module Configuration (New)
+
+**🎯 Goal: 툴체인 및 다중 환경 구성, 의존성 관리**
+- `[ ]` [Task] 신규 라이브러리 추가 시 무조건 `gradle/libs.versions.toml`에 먼저 정의하도록 프로젝트 가이드 문서(`README.md`) 업데이트
+- `[ ]` [Task] 루트 `build.gradle.kts`에 `java { toolchain { languageVersion.set(JavaLanguageVersion.of(25)) } }` 설정 추가
+
+---
+
+## Epic 5. Medium Priority: Test Infrastructure & Refactoring
+
+### [Story 5.1] Testing Environment Overhaul
+
+**🎯 Goal: 테스트 데이터 격리(DB 롤백) 유틸리티 작성**
+- `[ ]` [Task] DB 상태를 롤백시키기 위해 모든 테이블의 TRUNCATE 쿼리를 실행하는 `TestDatabaseCleaner` 유틸리티 클래스 작성
+- `[ ]` [Task] 통합 테스트 Base 클래스에 `@AfterEach`를 사용해 `TestDatabaseCleaner.execute()` 호출 설정
+- `[ ]` [Task] `@SpringBootTest` 적용 Controller/Repository 테스트를 `@WebMvcTest`/`@DataJpaTest` 기반 슬라이스 테스트로 리팩토링
+
+**🎯 Goal: 단위 테스트 중복 제거 및 시간 모킹 제어**
+- `[ ]` [Task] 테스트에 자주 쓰이는 객체를 기본값으로 생성해주는 `FixtureFactory` 유틸리티 클래스 생성
+- `[ ]` [Task] 반복되는 경계값 테스트에 `@ParameterizedTest`와 `@CsvSource` 어노테이션을 적용하여 코드 중복 제거
+- `[ ]` [Task] 하드코딩된 `LocalDateTime.now()` 로직을 `java.time.Clock` 빈을 사용하도록 리팩토링 및 ArchUnit 룰 작성
+- `[x]` [Task] Split file into multiple test classes. (Completed)
+- `[x]` [Task] Set dependsOn for bootRun to test task. (Completed)
+
+---
+
+## Epic 6. Low Priority: Performance & Scalability
+
+### [Story 6.1] Redis Integration & Global Caching
+
+**🎯 Goal: Redis 인프라 구축 및 기본 설정**
+- `[ ]` [Task] `gradle/libs.versions.toml`에 `spring-boot-starter-data-redis` 정의 및 `build.gradle.kts` 추가
+- `[ ]` [Task] `application.yml`에 Redis 접속 정보(`spring.data.redis.host`, `port`) 추가
+- `[ ]` [Task] `RedisConfig` 클래스 생성 (ConnectionFactory 및 `RedisTemplate<String, Object>` 빈 등록)
+- `[ ]` [Task] `CacheConfig` 클래스 생성, `@EnableCaching` 선언 및 `RedisCacheManager` (TTL 포함) 설정
+
+**🎯 Goal: API 캐싱 및 리프레시 토큰 관리**
+- `[ ]` [Task] `RefreshToken` 데이터를 Redis에 저장하기 위한 엔티티(`@RedisHash`) 생성 및 Repository 구현
+- `[ ]` [Task] Insights 모듈의 조회용 API 메서드에 `@Cacheable` 적용 및 데이터 수정 시 `@CacheEvict` 처리
+
+### [Story 6.2] Spring Batch Setup
+
+**🎯 Goal: Spring Batch 모듈 셋업 및 일일 공정률 배치 잡 구현**
+- `[ ]` [Task] 프로젝트 루트에 `apps/pathfinder-batch` 서브모듈 디렉토리 생성 및 `settings.gradle.kts` 등록
+- `[ ]` [Task] Batch 모듈에 `spring-boot-starter-batch` 의존성 추가 및 `BatchApplication` 메인 클래스 작성
+- `[ ]` [Task] Spring Boot 3.x 방식 배치 설정을 위한 `BatchConfig` 클래스 작성
+- `[ ]` [Task] 일일 공정률 집계를 위한 `DailyProgressJobConfig` 클래스 생성 및 Job / Step (Reader, Processor, Writer) 구현
+
+### [Story 6.3] Database Monitoring & Health Checks
+
+**🎯 Goal: Actuator 헬스체크 및 DB 커넥션/쿼리 모니터링**
+- `[ ]` [Task] `gradle/libs.versions.toml`에 `spring-boot-starter-actuator` 정의 및 의존성 추가
+- `[ ]` [Task] `application.yml`에 `/actuator/health` 엔드포인트 노출 및 `show-details=always` 속성 추가
+- `[ ]` [Task] `application.yml`에 HikariCP 통계 노출 설정 추가
+- `[ ]` [Task] `application.yml`에 Hibernate Slow Query 로깅 설정 추가
+
+---
+
+## Epic 7. Lowest Priority: Code Quality & Conventions Enforcement
+
+### [Story 7.1] Linting & Formatting
+
+**🎯 Goal: Spotless 포맷팅 파이프라인 구축**
+- `[ ]` [Task] 루트 `build.gradle.kts`에 `com.diffplug.spotless` 플러그인 추가 및 Google Java Format 지정
+- `[ ]` [Task] 터미널에서 `./gradlew spotlessApply` 명령어를 실행하여 전체 소스코드 포맷팅 일괄 수정
+- `[ ]` [Task] Git `pre-commit` 훅을 생성하여 커밋 전 `./gradlew spotlessCheck` 자동 실행 스크립트 작성
+
+### [Story 7.2] Coding Style Enforcement (ArchUnit)
+
+**🎯 Goal: Spring Data JPA 및 기타 세부 컨벤션 강제(ArchUnit)**
+- `[x]` [Task] Enforce strict naming convention & general coding style constraints. (Completed)
+- `[ ]` [Task] Spring Data JPA Repository 메서드명이 `find`, `get`, `exists`, `count`, `delete`로만 시작하도록 룰 작성
+- `[ ]` [Task] 애플리케이션 코드 내 `System.out.println` 및 `System.err.println` 사용 금지 룰 작성
+- `[ ]` [Task] 서비스 인터페이스 구현체 이름이 `Impl` 접미사를 가지도록 강제하는 룰 작성
+
+### [Story 7.3] Documentation Standardization (New)
+
+**🎯 Goal: 문서 자동 포맷팅 및 체크리스트 관리**
+- `[ ]` [Task] `docs` 폴더 내 비 Markdown 파일 식별 후 Pandoc 활용해 `.md` 파일로 변환하는 스크립트 작성
+- `[ ]` [Task] KISA 소프트웨어 보안약점 진단가이드 체크리스트를 포함한 `docs/security-checklist.md` 생성
+
+---
+
+## Epic 8. Lowest Priority: CI/CD, Telemetry & Security
+
+### [Story 8.1] CI/CD Pipeline (GitHub Actions & GitOps)
+
+**🎯 Goal: GitHub Actions 기반 지속적 통합 파이프라인 구축**
+- `[ ]` [Task] `.github/workflows/ci.yml` 생성 (Java 환경 세팅, Gradle 캐싱, `./gradlew build` 테스트 스텝 작성)
+- `[ ]` [Task] CI 빌드 완료 후 성공/실패 상태를 Slack Webhook URL로 전송하는 스텝 추가
+- `[ ]` [Task] `.github/dependabot.yml` 생성 및 의존성 자동 업데이트 주기 설정
+
+**🎯 Goal: GitOps (ArgoCD 연동 준비) 및 CD 파이프라인**
+- `[ ]` [Task] 프로젝트 루트(또는 별도 매니페스트 저장소)에 `k8s` 디렉토리 생성 후 Helm Chart 또는 Kustomize 기본 템플릿(Deployment, Service) 작성
+- `[ ]` [Task] `docker-build.yml`에서 Docker Image Push 성공 시 `k8s` 디렉토리 내의 이미지 태그 버전을 자동 업데이트(Commit & Push)하는 스텝 추가 (ArgoCD 트리거 목적)
+
+### [Story 8.2] Centralized Logging & Traceability
+
+**🎯 Goal: 로그 포맷 및 MDC 로깅**
+- `[ ]` [Task] `src/main/resources/logback-spring.xml` 생성 및 Console/RollingFile 로깅 포맷 정의
+- `[ ]` [Task] 모든 HTTP 요청 헤더에서 Trace ID를 추출하여 MDC에 주입하는 `MdcLoggingFilter` 구현
+
+### [Story 8.3] Telemetry & Distributed Tracing
+
+**🎯 Goal: 분산 트레이싱(Zipkin) 및 메트릭 수집(Prometheus)**
+- `[ ]` [Task] `build.gradle.kts`에 `micrometer-tracing-bridge-brave`, `zipkin-reporter-brave` 의존성 추가
+- `[ ]` [Task] `application.yml`에 샘플링 확률 및 Zipkin 서버 URL 설정 추가
+- `[ ]` [Task] `build.gradle.kts`에 `micrometer-registry-prometheus` 의존성 추가 및 `/actuator/prometheus` 오픈
+
+### [Story 8.4] Modulith Event Fallback & Security
+
+**🎯 Goal: 이벤트 Fallback 및 템플릿/보안 검사 자동화**
+- `[x]` [Task] Spring Modulith 이벤트를 활용한 모듈 간 통신(EDA) 보완 및 장애 격리 (Partially Completed)
+- `[ ]` [Task] 프로젝트 루트에 `.github/PULL_REQUEST_TEMPLATE.md` 및 `ISSUE_TEMPLATE` 파일 생성
+- `[ ]` [Task] `.github/workflows/codeql-analysis.yml` 생성 및 CodeQL 보안 취약점 스캔 스텝 추가
+
+### [Story 8.5] Human Inspection & Quality Gate
+
+**🎯 Goal: 품질 게이트(Quality Gate) 및 수동 리뷰 강제화**
+- `[ ]` [Task] GitHub `main` 브랜치에 대해 `Require a pull request before merging` (최소 1명 리뷰) 룰 적용
+
+---
+
+## Epic 9. Cloud Infrastructure & MSA Deployment (AWS)
+
+### [Story 9.1] Containerization & Artifact Registry
+
+**🎯 Goal: 도커라이징 및 ECR 배포 파이프라인**
+- `[ ]` [Task] 프로젝트 루트에 Multi-stage `Dockerfile` 작성 및 `USER 1001` 권한 제한 추가
+- `[ ]` [Task] `.github/workflows/docker-build.yml` 생성 (aws-actions 설정 후 ECR build & push 스텝 작성)
+
+### [Story 9.2] Infrastructure as Code (IaC)
+
+**🎯 Goal: AWS 네트워크 및 리소스 인프라 코드화(Terraform)**
+- `[ ]` [Task] `infrastructure/aws/terraform` 폴더 생성 후 `main.tf`, `variables.tf` 작성
+- `[ ]` [Task] `vpc.tf` 파일을 생성해 네트워크 리소스 작성
+- `[ ]` [Task] `rds.tf` (PostgreSQL) 및 `ecs.tf` (ECS Cluster/Fargate Task) 리소스 정의 파일 작성
+
+### [Story 9.3] Secret Management
+
+**🎯 Goal: AWS Secrets Manager 연동**
+- `[ ]` [Task] `build.gradle.kts`에 `spring-cloud-starter-aws-secrets-manager-config` 추가
+- `[ ]` [Task] `bootstrap.yml` 생성 후 `aws-secretsmanager:` 설정 추가 및 `application.yml` 민감 정보 치환
+
+### [Story 9.4] Fatal Alerting & Incident Response (Server Crash)
+
+**🎯 Goal: 클라우드 장애 모니터링 및 알림 파이프라인**
+- `[ ]` [Task] Terraform `cloudwatch.tf` 파일에 ECS Task CPU 80% 초과 시 작동하는 알람 리소스 추가
+- `[ ]` [Task] Terraform `cloudwatch.tf` 파일에 ECS Task Memory 80% 초과 시 작동하는 알람 리소스 추가
+- `[ ]` [Task] Terraform `cloudwatch.tf` 파일에 Target Group의 HTTP 5xx 에러율 증가(다운타임) 모니터링 알람 리소스 추가
+- `[ ]` [Task] Terraform `cloudwatch.tf` 파일에 ALB / NAT Gateway 네트워크 트래픽 급증(부하) 모니터링 알람 리소스 추가
+- `[ ]` [Task] Terraform `sns.tf` 파일에 알람 전송용 SNS Topic 리소스 추가 및 Chatbot 연동 문서 작성
+- `[ ]` [Task] 애플리케이션 에러 로그 발생 시 CloudWatch 메트릭 필터 기반 알람을 트리거하는 Terraform 코드 작성
