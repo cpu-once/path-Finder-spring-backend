@@ -117,7 +117,7 @@
 **🎯 Goal: 런타임 제어 및 외부 API 장애 대비**
 
 - `[ ]` [Task] `-XX:+HeapDumpOnOutOfMemoryError` 등 JVM 옵션을 추가하여 OOM 발생 시 자동 힙 덤프 설정
-- [ ] [Retrospective] JVM 옵션 및 OOM 설정 작업 리뷰 및 관련 문서 업데이트
+- [ ] [Retrospective] JVM 옵 및 OOM 설정 작업 리뷰 및 관련 문서 업데이트
 - `[ ]` [Task] `build.gradle.kts`에 Spring Boot Actuator 의존성 추가
 - [ ] [Retrospective] Spring Boot Actuator 설정 작업 리뷰 및 관련 문서 업데이트
 - `[ ]` [Task] `application.yml`에 `/actuator/loggers` 엔드포인트 활성화 설정 추가 (실시간 로그 레벨 변경용)
@@ -128,9 +128,9 @@
 
 ---
 
-## Epic 2. Highest Priority: Core Domain (AI-Driven BIM Work Graph Query System)
+## Epic 3. Highest Priority: Core Domain (AI-Driven BIM Work Graph Query System)
 
-### [Story 2.1] Database Integration & Docker Local Environment (Highest)
+### [Story 3.1] Database Integration & Docker Local Environment (Highest)
 
 **🎯 Goal: 단일 DataSource(H2/PostgreSQL) 통합 및 로컬 도커 환경 구축**
 
@@ -149,7 +149,7 @@
 - `[ ]` [Task] `build.gradle.kts`에 `spring-boot-docker-compose` 의존성 추가 (앱 실행 시 도커 자동 기동)
 - [ ] [Retrospective] Docker 환경 구성 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 2.2] Database Migration (Flyway/Liquibase)
+### [Story 3.2] Database Migration (Flyway/Liquibase)
 
 **🎯 Goal: Flyway 마이그레이션 적용 및 스키마 초기화**
 
@@ -169,7 +169,7 @@
 - [ ] [Retrospective] src/main/resources/db/migra... 작업 리뷰 및 관련 문서 업데이트
   생성 DDL)
 
-### [Story 2.3] API Documentation & Error Handling Foundation
+### [Story 3.3] API Documentation & Error Handling Foundation
 
 **🎯 Goal: REST Docs와 Swagger의 결합 (restdocs-api-spec)**
 
@@ -195,7 +195,42 @@
 - [ ] [Retrospective] 커스텀 BusinessException 작업 리뷰 및 관련 문서 업데이트
   `ProblemDetail` 객체로 변환 반환하는 메서드 작성
 
-### [Story 2.4] IFC Data Ingestion & Graph Modeling
+## Epic 2. Native LLM Engine Integration (Project Panama & llama.cpp)
+
+### [Story 2.1] llama.cpp Native Binding Setup (Direct Integration)
+
+**🎯 Goal: Docker 없이 Project Panama(FFM API)를 통해 llama.cpp 직접 연동**
+
+- `[ ]` [Task] 로컬 환경(macOS/Darwin)용 `llama.cpp` 빌드 및 공유 라이브러리(`.dylib`) 생성
+- [ ] [Retrospective] llama.cpp 빌드 작업 리뷰 및 관련 문서 업데이트
+- `[ ]` [Task] Project Panama (FFM API)를 사용하여 `llama.h` 헤더 기반 Java 바인딩 구현
+- [ ] [Retrospective] FFM API 바인딩 구현 작업 리뷰 및 관련 문서 업데이트
+- `[ ]` [Task] `NativeLlamaEngine` 컴포넌트 구현 (모델 로드, 토큰화, 추론 루프 제어)
+- [ ] [Retrospective] NativeLlamaEngine 구현 작업 리뷰 및 관련 문서 업데이트
+- `[ ]` [Task] Java 25의 Structured Concurrency를 활용한 비동기 추론 스트림 처리 구현
+- [ ] [Retrospective] 비동기 추론 스트림 처리 작업 리뷰 및 관련 문서 업데이트
+
+### [Story 2.2] Valhalla & Panama Optimization
+
+**🎯 Goal: Project Valhalla(Value Types) 및 Panama 최적화 적용**
+
+- `[ ]` [Task] `llama.cpp`와의 데이터 교환 시 가비지 컬렉션 부하를 줄이기 위한 `MemorySegment` 및 `Arena` 관리 최적화
+- [ ] [Retrospective] 메모리 관리 최적화 작업 리뷰 및 관련 문서 업데이트
+- `[ ]` [Task] (실험적) Project Valhalla의 Value Objects를 사용하여 추론 엔진의 데이터 구조(Tensor metadata 등) 경량화
+- [ ] [Retrospective] Valhalla 적용 실험 리뷰 및 관련 문서 업데이트
+
+### [Story 2.3] AI Service Integration & Benchmarking
+
+**🎯 Goal: 기존 AI 서비스 계층에 Native 엔진 통합 및 성능 검증**
+
+- `[ ]` [Task] `NativeLlamaEngine`을 `AiQueryService`의 백엔드로 연동 (Epic 3.6 기반)
+- [ ] [Retrospective] AI 서비스 통합 작업 리뷰 및 관련 문서 업데이트
+- `[ ]` [Task] 로컬 CPU/GPU(Metal) 가속 활성화 및 추론 속도 벤치마크 수행
+- [ ] [Retrospective] 벤치마크 수행 및 성능 분석 리뷰 및 관련 문서 업데이트
+
+---
+
+### [Story 3.4] IFC Data Ingestion & Graph Modeling
 
 **🎯 Goal: IFC 파싱 라이브러리 연동**
 
@@ -229,7 +264,7 @@
 - `[ ]` [Task] `WorkGraph` 객체 생성 시 순환 참조(Cycle) 발생 여부를 검증하는 로직 추가
 - [ ] [Retrospective] 워크 그래프 모델링 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 2.5] LLM Context Preparation & Serialization
+### [Story 3.5] LLM Context Preparation & Serialization
 
 **🎯 Goal: 그래프 모델의 AI 프롬프트용 직렬화**
 
@@ -250,7 +285,7 @@
 - [ ] [Retrospective] 그래프 직렬화 구현 작업 리뷰 및 관련 문서 업데이트
   구현
 
-### [Story 2.6] AI Query Integration (Spring AI / LangChain)
+### [Story 3.6] AI Query Integration (Spring AI / LangChain)
 
 **🎯 Goal: Spring AI 연동 설정**
 
@@ -280,9 +315,9 @@
 
 ---
 
-## Epic 3. High Priority: Core Feature Implementation (Data Seeding & Universal WAL)
+## Epic 4. High Priority: Core Feature Implementation (Data Seeding & Universal WAL)
 
-### [Story 3.1] Universal WAL (Write-Ahead Logging) & Decision Record Foundation
+### [Story 4.1] Universal WAL (Write-Ahead Logging) & Decision Record Foundation
 
 **🎯 Goal: 전 모듈 불변 WAL(Write-Ahead Logging) 및 의사결정 추적 시스템 구축**
 
@@ -297,7 +332,7 @@
 - `[ ]` [Task] 특정 의사결정 시점의 WorkGraph 컨텍스트와 WAL 상태를 묶어 스냅샷으로 기록(Audit Trail)하는 로직 구현
 - [ ] [Retrospective] 워크 그래프 모델링 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 3.2] Mock Data Generation Pipeline
+### [Story 4.2] Mock Data Generation Pipeline
 
 **🎯 Goal: Mock 데이터 생성 기반 설정**
 
@@ -329,9 +364,9 @@
 
 ---
 
-## Epic 4. Medium Priority: Infrastructure & Architecture Setup
+## Epic 5. Medium Priority: Infrastructure & Architecture Setup
 
-### [Story 4.1] Spring Security & Auth (JWT/OAuth2)
+### [Story 5.1] Spring Security & Auth (JWT/OAuth2)
 
 **🎯 Goal: Spring Security 및 JWT 인증 기반 구축**
 
@@ -362,7 +397,7 @@
 - `[ ]` [Task] 특정 엔드포인트에 `@PreAuthorize("hasRole('ADMIN')")` 어노테이션을 적용하고 테스트 코드 작성
 - [ ] [Retrospective] 보안 및 인증 구축 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 4.2] Architectural Constraints Enforcement (ArchUnit)
+### [Story 5.2] Architectural Constraints Enforcement (ArchUnit)
 
 **🎯 Goal: 외부 의존성 및 네이밍 룰 검증 (ArchUnit)**
 
@@ -386,7 +421,7 @@
 - `[x]` [Task] Refactor hardcoded strings to constants. (Completed)
 - [ ] [Retrospective] Refactor hardcoded strings ... 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 4.3] Architecture Review & Alignment
+### [Story 5.3] Architecture Review & Alignment
 
 **🎯 Goal: 모듈 간 아키텍처 일관성 및 이벤트 분리 리뷰**
 
@@ -403,7 +438,7 @@
 - [ ] [Retrospective] build 작업 리뷰 및 관련 문서 업데이트
   PlantUML) 자동 생성
 
-### [Story 4.4] Multi-Environment Module Configuration (New)
+### [Story 5.4] Multi-Environment Module Configuration (New)
 
 **🎯 Goal: 툴체인 및 다중 환경 구성, 의존성 관리**
 
@@ -415,9 +450,9 @@
 
 ---
 
-## Epic 5. Medium Priority: Test Infrastructure & Refactoring
+## Epic 6. Medium Priority: Test Infrastructure & Refactoring
 
-### [Story 5.1] Testing Environment Overhaul
+### [Story 6.1] Testing Environment Overhaul
 
 **🎯 Goal: 테스트 데이터 격리(DB 롤백) 유틸리티 작성**
 
@@ -444,9 +479,9 @@
 
 ---
 
-## Epic 6. Low Priority: Performance & Scalability
+## Epic 7. Low Priority: Performance & Scalability
 
-### [Story 6.1] Redis Integration & Global Caching
+### [Story 7.1] Redis Integration & Global Caching
 
 **🎯 Goal: Redis 인프라 구축 및 기본 설정**
 
@@ -467,7 +502,7 @@
 - `[ ]` [Task] Insights 모듈의 조회용 API 메서드에 `@Cacheable` 적용 및 데이터 수정 시 `@CacheEvict` 처리
 - [ ] [Retrospective] Insights 모듈의 조회용 API 메서드에 @... 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 6.2] Spring Batch Setup
+### [Story 7.2] Spring Batch Setup
 
 **🎯 Goal: Spring Batch 모듈 셋업 및 일일 공정률 배치 잡 구현**
 
@@ -481,7 +516,7 @@
 - [ ] [Retrospective] 일일 공정률 집계를 위한 DailyProgress... 작업 리뷰 및 관련 문서 업데이트
   Writer) 구현
 
-### [Story 6.3] Database Monitoring & Health Checks
+### [Story 7.3] Database Monitoring & Health Checks
 
 **🎯 Goal: Actuator 헬스체크 및 DB 커넥션/쿼리 모니터링**
 
@@ -496,9 +531,9 @@
 
 ---
 
-## Epic 7. Lowest Priority: Code Quality & Conventions Enforcement
+## Epic 8. Lowest Priority: Code Quality & Conventions Enforcement
 
-### [Story 7.1] Linting & Formatting
+### [Story 8.1] Linting & Formatting
 
 **🎯 Goal: Spotless 포맷팅 파이프라인 구축**
 
@@ -509,7 +544,7 @@
 - `[ ]` [Task] Git `pre-commit` 훅을 생성하여 커밋 전 `./gradlew spotlessCheck` 자동 실행 스크립트 작성
 - [ ] [Retrospective] Spotless 설정 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 7.2] Coding Style Enforcement (ArchUnit)
+### [Story 8.2] Coding Style Enforcement (ArchUnit)
 
 **🎯 Goal: Spring Data JPA 및 기타 세부 컨벤션 강제(ArchUnit)**
 
@@ -523,7 +558,7 @@
 - `[ ]` [Task] 서비스 인터페이스 구현체 이름이 `Impl` 접미사를 가지도록 강제하는 룰 작성
 - [ ] [Retrospective] 서비스 인터페이스 구현체 이름이 Impl 접미사를... 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 7.3] Documentation Standardization (New)
+### [Story 8.3] Documentation Standardization (New)
 
 **🎯 Goal: 문서 자동 포맷팅 및 체크리스트 관리**
 
@@ -534,9 +569,9 @@
 
 ---
 
-## Epic 8. Lowest Priority: CI/CD, Telemetry & Security
+## Epic 9. Lowest Priority: CI/CD, Telemetry & Security
 
-### [Story 8.1] CI/CD Pipeline (GitHub Actions & GitOps)
+### [Story 9.1] CI/CD Pipeline (GitHub Actions & GitOps)
 
 **🎯 Goal: GitHub Actions 기반 지속적 통합 파이프라인 구축**
 
@@ -556,7 +591,7 @@
 - [ ] [Retrospective] docker-build 작업 리뷰 및 관련 문서 업데이트
   Push)하는 스텝 추가 (ArgoCD 트리거 목적)
 
-### [Story 8.2] Centralized Logging & Traceability
+### [Story 9.2] Centralized Logging & Traceability
 
 **🎯 Goal: 로그 포맷 및 MDC 로깅**
 
@@ -565,7 +600,7 @@
 - `[ ]` [Task] 모든 HTTP 요청 헤더에서 Trace ID를 추출하여 MDC에 주입하는 `MdcLoggingFilter` 구현
 - [ ] [Retrospective] 모든 HTTP 요청 헤더에서 Trace ID를 추... 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 8.3] Telemetry & Distributed Tracing
+### [Story 9.3] Telemetry & Distributed Tracing
 
 **🎯 Goal: 분산 트레이싱(Zipkin) 및 메트릭 수집(Prometheus)**
 
@@ -582,7 +617,7 @@
 - [ ] [Retrospective] application 작업 리뷰 및 관련 문서 업데이트
   `management.zipkin.tracing.endpoint` 설정
 
-### [Story 8.4] Modulith Event Fallback & Security
+### [Story 9.4] Modulith Event Fallback & Security
 
 **🎯 Goal: 이벤트 Fallback 및 템플릿/보안 검사 자동화**
 
@@ -593,7 +628,7 @@
 - `[ ]` [Task] `.github/workflows/codeql-analysis.yml` 생성 및 CodeQL 보안 취약점 스캔 스텝 추가
 - [ ] [Retrospective]  작업 리뷰 및 관련 문서 업데이트
 
-### [Story 8.5] Human Inspection & Quality Gate
+### [Story 9.5] Human Inspection & Quality Gate
 
 **🎯 Goal: 품질 게이트(Quality Gate) 및 수동 리뷰 강제화**
 
@@ -602,9 +637,9 @@
 
 ---
 
-## Epic 9. Cloud Infrastructure & MSA Deployment (AWS)
+## Epic 10. Lowest Priority: Cloud Infrastructure & MSA Deployment (AWS)
 
-### [Story 9.1] Containerization & Artifact Registry
+### [Story 10.1] Containerization & Artifact Registry
 
 **🎯 Goal: 도커라이징 및 ECR 배포 파이프라인**
 
@@ -613,7 +648,7 @@
 - `[ ]` [Task] `.github/workflows/docker-build.yml` 생성 (aws-actions 설정 후 ECR build & push 스텝 작성)
 - [ ] [Retrospective]  작업 리뷰 및 관련 문서 업데이트
 
-### [Story 9.2] Infrastructure as Code (IaC)
+### [Story 10.2] Infrastructure as Code (IaC)
 
 **🎯 Goal: AWS 네트워크 및 리소스 인프라 코드화(Terraform)**
 
@@ -624,7 +659,7 @@
 - `[ ]` [Task] `rds.tf` (PostgreSQL) 및 `ecs.tf` (ECS Cluster/Fargate Task) 리소스 정의 파일 작성
 - [ ] [Retrospective] rds 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 9.3] Secret Management
+### [Story 10.3] Secret Management
 
 **🎯 Goal: AWS Secrets Manager 연동**
 
@@ -633,7 +668,7 @@
 - `[ ]` [Task] `bootstrap.yml` 생성 후 `aws-secretsmanager:` 설정 추가 및 `application.yml` 민감 정보 치환
 - [ ] [Retrospective] bootstrap 작업 리뷰 및 관련 문서 업데이트
 
-### [Story 9.4] Fatal Alerting & Incident Response (Server Crash)
+### [Story 10.4] Fatal Alerting & Incident Response (Server Crash)
 
 **🎯 Goal: 클라우드 장애 모니터링 및 알림 파이프라인**
 
@@ -652,9 +687,9 @@
 
 ---
 
-## Epic 10. SRE & Deep Infrastructure (시간남으면 할일)
+## Epic 11. SRE & Deep Infrastructure (시간남으면 할일)
 
-### [Story 10.1] eBPF & OS Level Monitoring
+### [Story 11.1] eBPF & OS Level Monitoring
 
 **🎯 Goal: 커널 레벨 네트워크 및 리소스 병목 추적**
 
