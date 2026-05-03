@@ -49,3 +49,7 @@ To successfully guide the AI and review its output, the human developer must tho
 ### 2.5 Prompt Engineering for Incremental Delivery
 - **Learning Requirement**: Learn to slice tasks from the `backlog.md` into highly specific, bite-sized prompts.
 - **Why**: Asking AI to "Implement Epic 2" will result in chaotic, broken code. You must ask for exactly one Task at a time (e.g., "Create the `WorkGroup` Entity with schema 'baseline'").
+
+### 2.6 Advanced System Debugging & eBPF (For Future Scaling)
+- **Learning Requirement**: Basic understanding of eBPF (Extended Berkeley Packet Filter) concepts and modern observability tools (like BCC, bpftrace, Cilium, or Pixie) over traditional shell utilities (`awk`, `sed`, `grep`).
+- **Why**: As the system transitions to Kubernetes (Epic 9) and requires deep SRE-level monitoring (Epic 10), traditional shell parsing becomes inadequate and unsafe. The developer must understand that eBPF is the modern, safe way to trace kernel-level metrics (TCP drops, process scheduling, I/O latency) without modifying kernel source code or loading unstable modules. AI might suggest old-school shell hacking; the developer must pivot the AI towards eBPF-based solutions when low-level debugging is required.

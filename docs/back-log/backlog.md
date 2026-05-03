@@ -196,6 +196,7 @@
 - `[ ]` [Task] 각 모듈의 `package-info.java` 파일에 Spring Modulith `@ApplicationModule` 검증 테스트 작성
 - `[ ]` [Task] 모듈 간 통신용 `event` 패키지 분리 및 외부 노출 제한(package-private) 룰 작성
 - `[ ]` [Task] 모듈 간 통신이 무조건 이벤트(`ApplicationEventPublisher`)를 통해 일어나도록(타 모듈의 Service 빈 직접 주입 금지) 강제하는 ArchUnit 테스트 룰 작성
+- `[ ]` [Task] `build.gradle.kts`에 `spring-modulith-docs` 의존성 추가 및 Gradle Task 설정을 통해 모듈 의존성 다이어그램(PlantUML) 자동 생성
 
 ### [Story 4.4] Multi-Environment Module Configuration (New)
 
@@ -305,6 +306,8 @@
 - `[ ]` [Task] `build.gradle.kts`에 `micrometer-tracing-bridge-brave`, `zipkin-reporter-brave` 의존성 추가
 - `[ ]` [Task] `application.yml`에 샘플링 확률 및 Zipkin 서버 URL 설정 추가
 - `[ ]` [Task] `build.gradle.kts`에 `micrometer-registry-prometheus` 의존성 추가 및 `/actuator/prometheus` 오픈
+- `[ ]` [Task] 로컬 `docker-compose.yml`에 Zipkin UI 서버 컨테이너 설정 추가
+- `[ ]` [Task] `application.yml`에 수집된 트레이스 데이터를 로컬 Zipkin 서버로 전송하도록 `management.zipkin.tracing.endpoint` 설정
 
 ### [Story 8.4] Modulith Event Fallback & Security
 
@@ -350,3 +353,13 @@
 - `[ ]` [Task] Terraform `cloudwatch.tf` 파일에 ALB / NAT Gateway 네트워크 트래픽 급증(부하) 모니터링 알람 리소스 추가
 - `[ ]` [Task] Terraform `sns.tf` 파일에 알람 전송용 SNS Topic 리소스 추가 및 Chatbot 연동 문서 작성
 - `[ ]` [Task] 애플리케이션 에러 로그 발생 시 CloudWatch 메트릭 필터 기반 알람을 트리거하는 Terraform 코드 작성
+
+---
+
+## Epic 10. SRE & Deep Infrastructure (Icebox)
+
+### [Story 10.1] eBPF & OS Level Monitoring
+**🎯 Goal: 커널 레벨 네트워크 및 리소스 병목 추적**
+- `[ ]` [Task] eBPF 기반 네트워크 패킷 캡처 및 HTTP 지연율 실시간 모니터링 데몬 설정 리서치
+- `[ ]` [Task] Node Exporter를 활용하여 EKS/EC2 노드의 디스크 I/O 틱, TCP Connection Drop 메트릭 수집 및 Prometheus 연동
+- `[ ]` [Task] 실시간 시스템 로그(`dmesg`, `syslog`) 파싱을 위한 커스텀 쉘 스크립트 작성 및 알람 연동
