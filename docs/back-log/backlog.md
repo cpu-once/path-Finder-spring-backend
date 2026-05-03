@@ -2,7 +2,14 @@
 
 ## Epic 1. Absolute Priority: Real-time Developer Experience (DevEx) & Continuous Profiling
 
-### [Story 1.1] Real-time Quality & Performance Feedback Tools
+### [Story 1.1] Git Commit Convention Enforcement (Highest Priority)
+
+**🎯 Goal: IDE(IntelliJ)에서 Git 커밋 컨벤션 강제**
+- `[ ]` [Task] 프로젝트 루트에 팀 커밋 컨벤션이 명시된 `.gitmessage` 템플릿 파일 생성
+- `[ ]` [Task] IntelliJ의 Git 설정과 `.gitmessage` 파일을 연동하여 커밋 시 템플릿이 자동 적용되도록 설정하는 가이드 문서(`docs/guidelines/git-convention.md`) 업데이트
+- `[ ]` [Task] (선택) Conventional Commits 플러그인 등 커밋 컨벤션을 더 강력하게 강제하는 IntelliJ 플러그인 리서치 및 도입 고려
+
+### [Story 1.2] Real-time Quality & Performance Feedback Tools
 
 **🎯 Goal: 테스트 커버리지 자동화 (JaCoCo)**
 - `[ ]` [Task] `gradle/libs.versions.toml`에 `jacoco` 플러그인 버전 정의 (예: 0.8.11)
@@ -29,13 +36,13 @@
 - `[ ]` [Task] Apache JMeter용 기본 부하 테스트 JMX 스크립트 템플릿(단순 API 호출) 작성
 - `[ ]` [Task] Spring Boot 3.2+ 의 `spring-boot-devtools`를 `build.gradle.kts`에 추가하여 클래스 리로딩(Hot-Swap) 설정
 
-### [Story 1.2] Multi-AI Collaboration Workflow
+### [Story 1.3] Multi-AI Collaboration Workflow
 
 **🎯 Goal: AI 에이전트 동시성 제어 및 쉘 제어 훅**
 - `[ ]` [Task] 다중 AI 에이전트 동시 사용 시 컨텍스트 충돌 방지를 위한 디렉토리/모듈 단위 `.agent-lock` 파일 생성 및 검증 쉘 스크립트 작성
 - `[ ]` [Task] AI가 터미널 명령어 실행 전 구문을 검증(ShellCheck 호출 등)하는 프롬프팅 훅(Hook) 시스템 가이드라인 문서 작성
 
-### [Story 1.3] Advanced Runtime Observability & Control
+### [Story 1.4] Advanced Runtime Observability & Control
 
 **🎯 Goal: 런타임 제어 및 외부 API 장애 대비**
 - `[ ]` [Task] `-XX:+HeapDumpOnOutOfMemoryError` 등 JVM 옵션을 추가하여 OOM 발생 시 자동 힙 덤프 설정
